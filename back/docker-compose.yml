@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  flask-backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend-flask
+    restart: unless-stopped
+    environment:
+      PYTHONPATH: "/app"
+      MONGODB_DATABASE: myfdb
+      MONGODB_USERNAME: user
+      MONGODB_PASSWORD: password
+      MONGODB_HOSTNAME: mongodb
+    volumes:
+      - .:/app
+    ports:
+      - "8700:8700"
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+    
+  mongodb:
+    image: mongo:7.0.0-rc3-jammy
+    restart: unless-stopped
+    command: mongod --auth
+    environment:
+      MONGO_INITDB_DATABASE: myfdb
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - "./mongodbdata/data:/data/db"
+      - "./mongodbdata/configdb:/data/configdb"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
