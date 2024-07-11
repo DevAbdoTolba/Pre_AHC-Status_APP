@@ -1,5 +1,8 @@
 FROM python:3.10-slim
 
+ENV PYTHONPATH=/app
+ENV USR=root
+ENV pwd=pass123
 WORKDIR /app
 
 COPY requirements.txt requirements.txt
