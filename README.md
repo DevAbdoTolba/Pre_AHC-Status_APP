@@ -4,15 +4,16 @@
 
 the_issue_name-yourName
 
-<br /><br /><br />
+<br /><br />
 ### Data
 ```ts
 type Data = {
-name : string;
-age : Date;
-level : "easy"|"normal"|"hard";
-msg : string;
-status? : "open" | "close";
+name : string                  ;
+age : Date                     ;
+level : "easy"|"normal"|"hard" ;
+msg : string                   ;
+important? : true|false        ;
+status? : "open" | "close"     ;
 }
 ```
 ### Idea
