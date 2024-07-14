@@ -9,7 +9,7 @@ def home():
 def get_all():
     try:
         if request.method == 'GET':
-         condition = {"status": {"$ne": "closed"}}
+         condition = {"status": {"$ne": "close"}}
          data = db.data.find(condition)
          data_list = list(data)
          return jsonify(data_list)
