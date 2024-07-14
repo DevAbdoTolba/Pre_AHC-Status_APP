@@ -53,10 +53,8 @@ class Data:
             msg = data.get("msg")
             important = data.get("important", False)
 
-            status = data.get("status")
-            if status and status not in ("open", "close"):
-                raise ValueError("Invalid value for field: status")
-
+            status = data.get("status", "open")
+          
             _id = data.get("_id")
             if _id:
                 _id = ObjectId(_id)
