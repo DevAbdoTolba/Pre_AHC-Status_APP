@@ -1,7 +1,7 @@
 import React from 'react';
 
 const MyAppBar: React.FC = () => {
-  return <div>AppBar</div>;
+  return <div></div>;
 };
 
 export default MyAppBar;

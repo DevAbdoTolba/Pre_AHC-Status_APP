@@ -1,7 +1,13 @@
+// pages/index.tsx
 import React from 'react';
+import UserFormDesign from '../components/UserFormDesign.tsx';
 
 const Home: React.FC = () => {
-  return <p>index</p>;
+  return (
+    <div style={{ padding: '2rem' }}>
+      <UserFormDesign/>
+    </div>
+  );
 };
 
 export default Home;
