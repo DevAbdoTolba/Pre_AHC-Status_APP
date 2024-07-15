@@ -8,7 +8,7 @@ class Data:
             self.id = _id if _id else ObjectId()
             self.name = name
             if isinstance(age, str):
-                self.age = datetime.strptime(age, "%d/%m/%Y").date()
+                self.age = datetime.strptime(age, "%Y-%m-%d").date()
             elif isinstance(age, date):
                 self.age = age
             else:
