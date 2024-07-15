@@ -10,7 +10,7 @@ class DeserializationError(Exception):
 
 def serialize_data(data_model):
     if not isinstance(data_model, Data):
-        raise SerializationError("Input is not a Data model instance.")
+        raise TypeError("Input is not a Data model instance.")
     
     try:
         data_dict = data_model.to_dict()
