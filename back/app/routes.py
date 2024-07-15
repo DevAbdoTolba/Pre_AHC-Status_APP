@@ -9,8 +9,7 @@ def home():
 @app.route('/create',methods = ['POST'])
 def create():
         try:
-            pass
-            # data = request.json()
+            data = request.json()
             # result = db.data.insert_one(data)
             # if result.inserted_id:
             #     return jsonify(val_msg = "the Complain registered successfully"),201
