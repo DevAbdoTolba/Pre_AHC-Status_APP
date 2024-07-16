@@ -92,13 +92,13 @@ function isMessageBig(input: string): string | boolean {
  return (<>
                <form onSubmit={handleSubmit(onSubmit)} >
                      {/* Name Input Field */}
-                     <input type='text' id='name' placeholder='Name' {...NameRegister()} />
+                     <input required  type='text' id='name' placeholder='Name' {...NameRegister()} />
                      <p>{ errors.username?.message}</p>
                      {/* BithDate Input Field */}
-                     <input id='date' type='date' {...DateRegister()} />
+                     <input required id='date' type='date' {...DateRegister()} />
                       <p >{errors.birthDate?.message}</p>
                      {/* Difficulty Level */}
-                     <select  {...DifficultyRegister()}>
+                     <select required  {...DifficultyRegister()}>
                             <option value="" disabled selected>Level</option>
                             <option>Easy</option>
                             <option>Medium</option>
@@ -106,7 +106,7 @@ function isMessageBig(input: string): string | boolean {
                      </select>
                       <p >{errors.level?.message}</p>
                      {/* Main Message */}
-                     <textarea placeholder='Message' id='confirm' {...MessageRegister()} /> 
+                     <textarea required placeholder='Message' id='confirm' {...MessageRegister()} /> 
                      <p>{errors.message?.message}</p>
                      {/* ------------------------------------- */}
                      <button className="btn my-4" >Submit</button>
