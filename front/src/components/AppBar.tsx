@@ -1,5 +1,5 @@
 import React from 'react';
-import UserForm  from './UserForm/UserForm';
+import UserForm  from './UserForm';
 
 const MyAppBar: React.FC = () => {
   return <div>

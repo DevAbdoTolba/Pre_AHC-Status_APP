@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Control, FieldErrors, FormState, useForm, UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
-import { hasSpecialCharacters,isUserNameVeryBig,isMessageBig } from './FormValidation';
 
 type FormValues = {
        username: string,
@@ -14,6 +13,21 @@ const UserForm: React.FC = () => {
        
 const { handleSubmit, register, formState } = useForm<FormValues>();
 const { errors } = formState;
+  
+// Important validation function
+function hasSpecialCharacters(input: string): string | boolean {
+       return (/^[A-Za-z\u0600-\u06FF\s]+$/.test(input)
+              || "special characters and digits not allowed");
+}
+
+function isUserNameVeryBig(input: string): string | boolean {
+      return (input.length < 50 || "Your Name is very Big");
+}
+
+
+function isMessageBig(input: string): string | boolean {
+      return (input.length < 200 || "Message is very Big");
+}
 
 
 
