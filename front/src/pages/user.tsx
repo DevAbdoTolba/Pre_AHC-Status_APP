@@ -2,7 +2,7 @@ import React from "react";
 
 const UserPage: React.FC = () => (
   <>
-    <>User Form</>
+    <p>User Form</p>
   </>
 );
 
