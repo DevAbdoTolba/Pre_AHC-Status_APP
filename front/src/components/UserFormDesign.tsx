@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, CircularProgress, Alert, MenuItem, Select, FormControl, InputLabel, OutlinedInput, Chip, Box, Typography, Container, Paper } from '@mui/material';
+import { TextField, Button, CircularProgress, Alert, MenuItem, Select, FormControl, InputLabel, OutlinedInput, Box, Typography, Container, Paper } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { pink, teal } from '@mui/material/colors';
@@ -21,7 +21,7 @@ const levels = ['Easy', 'Normal', 'Hard'];
 const UserFormDesign: React.FC = () => {
   const [name, setName] = useState('');
   const [dob, setDob] = useState<string>('');
-  const [level, setLevel] = useState<string[]>([]);
+  const [level, setLevel] = useState<string>('');
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -35,14 +35,14 @@ const UserFormDesign: React.FC = () => {
     setValidationError(null);
 
     // Validate inputs
-    if (!name || !dob || level.length === 0 || !msg) {
+    if (!name || !dob || !level || !msg) {
       setValidationError('All fields are required.');
       return;
     }
 
     setLoading(true);
 
-    // network request
+    // Simulating a network request
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       setSuccess(true);
@@ -50,7 +50,7 @@ const UserFormDesign: React.FC = () => {
       // Clear the form fields
       setName('');
       setDob('');
-      setLevel([]);
+      setLevel('');
       setMsg('');
     } catch (err) {
       setError('Submission failed');
@@ -59,9 +59,8 @@ const UserFormDesign: React.FC = () => {
     }
   };
 
-  const handleChange = (event: SelectChangeEvent<typeof level>) => {
-    const { target: { value } } = event;
-    setLevel(typeof value === 'string' ? value.split(',') : value);
+  const handleChange = (event: SelectChangeEvent<string>) => {
+    setLevel(event.target.value as string);
   };
 
   return (
@@ -133,22 +132,14 @@ const UserFormDesign: React.FC = () => {
               sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
             />
 
-            <FormControl variant="outlined">
-              <InputLabel id="demo-multiple-chip-label">Level</InputLabel>
+            <FormControl variant="outlined" required>
+              <InputLabel id="demo-simple-select-outlined-label">Level</InputLabel>
               <Select
-                labelId="demo-multiple-chip-label"
-                id="demo-multiple-chip"
-                multiple
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
                 value={level}
                 onChange={handleChange}
-                input={<OutlinedInput id="select-multiple-chip" label="Level" />}
-                renderValue={(selected) => (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} sx={{ backgroundColor: teal[100], color: teal[900] }} />
-                    ))}
-                  </Box>
-                )}
+                label="Level"
                 sx={{ borderRadius: 2 }}
               >
                 {levels.map((level) => (
