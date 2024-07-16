@@ -57,7 +57,7 @@ function isMessageBig(input: string): string | boolean {
        // Difficulty register Validation
        function DifficultyRegister():object
        {
-              return {...register('level' , {required:"Difficulty level is require" })};
+              return {...register('level' ,{required:"Difficulty  field is require" , validate:{NotEmpty:(input)=> input!=="" || "Difficulty field is require"}})};
        }
        //  message register Validation
        function MessageRegister():object
@@ -99,6 +99,7 @@ function isMessageBig(input: string): string | boolean {
                       <p >{errors.birthDate?.message}</p>
                      {/* Difficulty Level */}
                      <select  {...DifficultyRegister()}>
+                            <option value="" disabled selected>Level</option>
                             <option>Easy</option>
                             <option>Medium</option>
                             <option>Hard</option>
