@@ -2,7 +2,7 @@
 from app import app,db
 from flask import jsonify, request
 from serializers import serialize_data
-from models import Data  # Adjust this import path according to your project structure
+from models import Data  
 
 @app.route('/')
 def home():
@@ -45,7 +45,6 @@ def create():
 @app.route('/get_all', methods=['GET'])
 def get_all():
     try:
-      #  db.data.drop()
         if request.method == 'GET':
          condition = {"status": {"$ne": "close"}}
          data = db.data.find(condition)
