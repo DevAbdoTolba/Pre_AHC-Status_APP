@@ -3,6 +3,9 @@ import { Box, Typography, CircularProgress } from '@mui/material';
 import { keyframes } from '@emotion/react'; // Import keyframes utility from Emotion
 import Link from 'next/link';
 import Button from '@mui/material/Button';
+import PersonIcon from '@mui/icons-material/Person';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
+
 const Home: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
@@ -136,16 +139,52 @@ const Home: React.FC = () => {
           </Box>
         </Box>
       ) : (
-        <Box sx={{ p: 4, textAlign: 'center' }}> {/* Increased padding for better spacing */}
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, marginBottom: 2  ,marginTop:20 }}> {/* Added margin-bottom for spacing */}
-          <Link href="/user">
-          <Button sx={{width: '30vw', height: '20vh',borderRadius:'20px' }} variant="contained" color='primary'>user</Button>
+        <Box sx={{ p: 4, textAlign: 'center' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 3, marginBottom: 2, marginTop: 20 }}>
+          <Link href="/user" passHref>
+            <Button 
+              sx={{ 
+                width: '30vw', 
+                height: '25vh',
+                fontSize: '1rem',
+                borderRadius: '20px', 
+                boxShadow: 3, 
+                transition: 'transform 0.3s, box-shadow 0.3s', 
+                '&:hover': { 
+                  transform: 'scale(1.05)', 
+                  boxShadow: 6 
+                } 
+              }} 
+              variant="contained" 
+              color="primary"
+              startIcon={<PersonIcon fontSize='inherit'/>}
+            >
+              User
+            </Button>
           </Link>
-          <Link href="/admin">
-          <Button sx={{width: '30vw', height: '20vh',borderRadius:'20px' }} variant="contained" color='secondary'>admin</Button>
+          <Link href="/admin" passHref>
+            <Button 
+              sx={{ 
+                width: '30vw', 
+                height: '25vh', 
+                fontSize: '1rem',
+                borderRadius: '20px', 
+                boxShadow: 3, 
+                transition: 'transform 0.3s, box-shadow 0.3s', 
+                '&:hover': { 
+                  transform: 'scale(1.05)', 
+                  boxShadow: 6 
+                } 
+              }} 
+              variant="contained" 
+              color="secondary"
+              startIcon={<AdminPanelSettingsIcon fontSize='inherit'/>}
+            >
+              Admin
+            </Button>
           </Link>
-          </Box>
         </Box>
+      </Box>
       )}
     </>
   );
