@@ -1,12 +1,13 @@
-// src/pages/Home.tsx
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, CircularProgress } from '@mui/material';
-
+import { keyframes } from '@emotion/react'; // Import keyframes utility from Emotion
+import link from 'next/link';
+import Button from '@mui/material/Button';
 const Home: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
 
-  useEffect(() => {
+  useEffect(() => { 
     const timer = setInterval(() => {
       setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
     }, 300);
@@ -14,82 +15,88 @@ const Home: React.FC = () => {
     setTimeout(() => {
       setLoading(false);
       clearInterval(timer);
-    }, 3000); // Display preload page for 3 seconds
+    }, 3200); // Display preload page for 3.2 seconds
 
     return () => {
       clearInterval(timer);
     };
   }, []);
 
-  // Animated gradient background
-const animatedBackground = {
-  '@keyframes gradientShift': {
-    '0%': { backgroundPosition: '0% 50%' },
-    '50%': { backgroundPosition: '100% 50%' },
-    '100%': { backgroundPosition: '0% 50%', opacity: 1 },
-  },
-  background: 'linear-gradient(270deg, #232D3F, #04364A, #232D3F)',
-  backgroundSize: '400% 400%',
-  animation: 'gradientShift 10s ease',
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  width: '100%',
-  height: '100%',
-  zIndex: 1000,
-  opacity: loading ? 1 : 0,
-  transition: 'opacity 0.5s ease-in-out',
-  
-};
+  // Define CSS keyframes globally
+  const gradientShift = keyframes`
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+      opacity: 1;
+    }
+  `;
 
-// Pulsating effect for CircularProgress
-const pulsateAnimation = {
-  '@keyframes pulsate': {
-    '0%': {
-      transform: 'scale(1)',
-      opacity: 1,
-    },
-    '50%': {
-      transform: 'scale(1.1)',
-      opacity: 0.7,
-    },
-    '100%': {
-      transform: 'scale(1)',
-      opacity: 1,
-    },
-  },
-  animation: 'pulsate 2s ease-out infinite',
-};
-// Fade-in effect for text
-const fadeInAnimation = {
-  '@keyframes fadeIn': {
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-  },
-  animation: 'fadeIn 2s ease-out forwards',
-};
+  const pulsate = keyframes`
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.7;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  `;
+
+  const fadeIn = keyframes`
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  `;
+
+  // Animated gradient background
+  const animatedBackground = {
+    background: 'linear-gradient(270deg, #232D3F, #04364A, #232D3F)',
+    backgroundSize: '400% 400%',
+    animation: `${gradientShift} 10s ease`,
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: 1000,
+    opacity: loading ? 1 : 0,
+    transition: 'opacity 0.5s ease-in-out',
+  };
+
+  // Pulsating effect for CircularProgress
+  const pulsateAnimation = {
+    animation: `${pulsate} 2s ease-out infinite`,
+  };
+
+  // Fade-in effect for text
+  const fadeInAnimation = {
+    animation: `${fadeIn} 1s ease-out forwards`, // Shorter duration for quicker fade-in
+  };
 
   return (
     <>
-
       {loading ? (
         <Box
           sx={{
             ...animatedBackground,
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            color: '#fff',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection: 'column',
             fontSize: '2rem',
-            zIndex: 1000,
-            opacity: 1,
-            transition: 'opacity 0.5s ease-in-out',
+            color: '#fff',
           }}
         >
           <Box
@@ -124,18 +131,19 @@ const fadeInAnimation = {
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
                 color: '#FFDE4D',
-                transition: 'opacity 0.5s ease-in-out',
               }}
             >{`${Math.round(progress)}%`}</Typography>
           </Box>
         </Box>
       ) : (
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h2">Home Page</Typography>
-          <p>Index</p>
+        <Box sx={{ p: 4, textAlign: 'center' }}> {/* Increased padding for better spacing */}
+          <Typography variant="h2" sx={{ marginBottom: 2 }}>Home Page</Typography> {/* Added margin-bottom for spacing */}
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, marginBottom: 2  ,marginTop:20 }}> {/* Added margin-bottom for spacing */}
+          <Button sx={{width: '30vw', height: '20vh',borderRadius:'20px' }} variant="contained" color='primary'>user</Button>
+          <Button sx={{width: '30vw', height: '20vh',borderRadius:'20px' }} variant="contained" color='secondary'>admin</Button>
+          </Box>
         </Box>
       )}
-
     </>
   );
 };
