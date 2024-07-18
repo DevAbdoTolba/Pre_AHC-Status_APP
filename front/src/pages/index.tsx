@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, CircularProgress } from '@mui/material';
 import { keyframes } from '@emotion/react'; // Import keyframes utility from Emotion
-import link from 'next/link';
+import Link from 'next/link';
 import Button from '@mui/material/Button';
 const Home: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -137,10 +137,13 @@ const Home: React.FC = () => {
         </Box>
       ) : (
         <Box sx={{ p: 4, textAlign: 'center' }}> {/* Increased padding for better spacing */}
-          <Typography variant="h2" sx={{ marginBottom: 2 }}>Home Page</Typography> {/* Added margin-bottom for spacing */}
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, marginBottom: 2  ,marginTop:20 }}> {/* Added margin-bottom for spacing */}
+          <Link href="/user">
           <Button sx={{width: '30vw', height: '20vh',borderRadius:'20px' }} variant="contained" color='primary'>user</Button>
+          </Link>
+          <Link href="/admin">
           <Button sx={{width: '30vw', height: '20vh',borderRadius:'20px' }} variant="contained" color='secondary'>admin</Button>
+          </Link>
           </Box>
         </Box>
       )}
