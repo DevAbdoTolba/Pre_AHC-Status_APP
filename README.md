@@ -8,10 +8,12 @@ the_issue_name-yourName
 ### Data
 ```ts
 type Data = {
-name : string                  ;
-age : Date                     ;
+name : string                  ;  
+age : Date                     ; //  <YYYY-mm-dd>
 level : "easy"|"normal"|"hard" ;
 msg : string                   ;
+createDate : Date              ; //  <YYYY-mm-ddTHH:MM:ss>
+closeDate? : Date              ; //  <YYYY-mm-ddTHH:MM:ss>
 important? : true|false        ;
 status? : "open" | "close"     ;
 }
