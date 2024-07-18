@@ -31,9 +31,9 @@ def create():
 
         result = db.data.insert_one(serialized_data)
         if result.inserted_id:
-            return jsonify({'message': 'The complaint registered successfully', 'data': serialized_data}), 201
+            return jsonify({'message': 'The complaint registered successfully'}), 201
         else:
-            return jsonify({'error': 'The complaint registration failed'}), 500
+            return jsonify({'error': 'An error occurred'}), 500
 
     except (ValueError) as e:
         return jsonify({"error ": str(e)}), 400
