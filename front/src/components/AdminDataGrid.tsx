@@ -28,7 +28,7 @@ import * as React from 'react';
   {
     field: "age",
     headerName: "Age",
-    type: "number",
+    type: "date",
     width: 150,
     editable: false,
   },
@@ -145,8 +145,7 @@ const rows = [
           },
         }}
         pageSizeOptions={[5]}
-        checkboxSelection
-        disableRowSelectionOnClick
+        
       />
       
     </Box>
