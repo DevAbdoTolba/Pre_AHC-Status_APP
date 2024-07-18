@@ -77,10 +77,10 @@ const MyAppBar: React.FC = () => {
             HOME
           </Typography></Button>
           <Button href='/user' LinkComponent={Link} disableRipple><Typography>
-            ADMIN
+            USER
           </Typography></Button>
           <Button href='/admin' LinkComponent={Link} disableRipple><Typography>
-            USER
+            ADMIN
           </Typography></Button>
         </Stack>
       </Box>
