@@ -1,8 +1,9 @@
 import React from 'react';
+import AdminDataGrid from '@/components/AdminDataGrid';
 
 const AdminPage: React.FC = () => (
   <>
-    <p>Admin</p>
+    <AdminDataGrid/>
   </>
 );
 
