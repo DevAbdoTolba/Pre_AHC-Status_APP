@@ -1,10 +1,11 @@
 import React from "react";
+import ItemView from "@/components/ItemView";
 
 const ItemPage: React.FC = () => {
   return (
     <>
       <>
-        Item Details
+        <ItemView/>
       </>
       
     </>
