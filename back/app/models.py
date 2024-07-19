@@ -79,7 +79,7 @@ class Data:
             }
                 
         stop_words_and_punctuation = [
-        ".", ",", "!", "?", ":", ";", "-", "_", "(", ")", "[", "]", "{", "}", "'", "\"", "`", "~", "@", "#", "$", "%", "^", "&", "*", "+", "=", "|", "\\", "/", "<", ">", "the", "there", "he", "she", "have", "has",
+        ".", ",", "!", "?", ":", ";", "-", "_", "(", ")", "[", "]", "{", "}", "'", "\"", "`", "~", "@", "#", "$", "%", "^", "&", "*", "+", "=", "|", "\\", "/", "<", ">", "the", "there", "he", "she","it", "have", "has",
         "i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this",
         "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as",
         "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over",
@@ -91,7 +91,7 @@ class Data:
 
         level_distribution_total = 0
         important_frequency = {True:0,False:0}
-        status_frequency = {"open":0,"closed":0}
+        status_frequency = {"open":0,"close":0}
         common_words = defaultdict(int)
         all_ages =[]
         for record in all_records:
@@ -109,7 +109,7 @@ class Data:
 
             #calculate common_words
             message = str(record['msg'])
-            message.translate(str.maketrans('', '', string.punctuation)) #remove all punctuation
+            message = message.translate(str.maketrans('', '', string.punctuation)) #remove all punctuation
             re.sub(' +', ' ', message) # remove multiple spaces e.g 'The   fox jumped   over    the log.'
 
             for word in message.split():
@@ -121,11 +121,12 @@ class Data:
             age_1 = datetime.strptime(age, "%Y-%m-%d").date()
             age_2 = datetime.strptime(all_ages[0], "%Y-%m-%d").date() - timedelta(days=1)
             avg_age +=  (age_1- age_2).days
-        avg_age = round(avg_age,1)
 
         #safe gurad to prevent division by zero
         avg_age /= max(1,len(all_ages))
         level_distribution_total = max(level_distribution_total,1)
+
+        avg_age = round(avg_age,2)
 
         #calculating percentages
         level_distribution["easy"][1] = level_distribution["easy"][0] * (100 / level_distribution_total)
@@ -142,7 +143,7 @@ class Data:
         Q1_list = []
         if len(common_words_sorted)>0:
             Q1_index = ceil(0.25 * len(common_words_sorted))
-            Q1_element_num = common_words_sorted[Q1_index-1][1]+1
+            Q1_element_num = common_words_sorted[Q1_index-1][1]
             Q1_list = [x for x in common_words_sorted if x[1]>=Q1_element_num]
 
 
