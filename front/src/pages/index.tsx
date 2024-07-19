@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Button from '@mui/material/Button';
 import PersonIcon from '@mui/icons-material/Person';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
+import { TextFieldsTwoTone } from '@mui/icons-material';
 
 const Home: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -13,12 +14,12 @@ const Home: React.FC = () => {
   useEffect(() => { 
     const timer = setInterval(() => {
       setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
-    }, 300);
+    }, 75);
     
     setTimeout(() => {
       setLoading(false);
       clearInterval(timer);
-    }, 3200); // Display preload page for 3.2 seconds
+    }, 750); // Display preload page for 0.75 seconds
 
     return () => {
       clearInterval(timer);
@@ -141,15 +142,23 @@ const Home: React.FC = () => {
       ) : (
         <Box sx={{ p: 4, textAlign: 'center' }}>
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 3, marginBottom: 2, marginTop: 20 }}>
-          <Link href="/user" passHref>
             <Button 
+            component={Link}
+            href="/user"
               sx={{ 
                 width: '30vw', 
                 height: '25vh',
-                fontSize: '1rem',
+                fontSize: '1.2rem',
                 borderRadius: '20px', 
                 boxShadow: 3, 
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
                 transition: 'transform 0.3s, box-shadow 0.3s', 
+                '& a': { 
+                  textDecoration: 'none' 
+                  },
                 '&:hover': { 
                   transform: 'scale(1.05)', 
                   boxShadow: 6 
@@ -157,20 +166,27 @@ const Home: React.FC = () => {
               }} 
               variant="contained" 
               color="primary"
-              startIcon={<PersonIcon fontSize='inherit'/>}
-            >
+              >
+              <PersonIcon sx={{fontSize:'3rem',marginBottom:'0.5rem'}}/>
               User
             </Button>
-          </Link>
-          <Link href="/admin" passHref>
-            <Button 
+            <Button
+            component={Link} 
+            href="/admin"
               sx={{ 
                 width: '30vw', 
                 height: '25vh', 
-                fontSize: '1rem',
+                fontSize: '1.2rem',
                 borderRadius: '20px', 
-                boxShadow: 3, 
-                transition: 'transform 0.3s, box-shadow 0.3s', 
+                boxShadow: 3,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center', 
+                transition: 'transform 0.3s, box-shadow 0.3s',
+                '& a': { 
+                textDecoration: 'none' 
+                }, 
                 '&:hover': { 
                   transform: 'scale(1.05)', 
                   boxShadow: 6 
@@ -178,11 +194,10 @@ const Home: React.FC = () => {
               }} 
               variant="contained" 
               color="secondary"
-              startIcon={<AdminPanelSettingsIcon fontSize='inherit'/>}
             >
+               <AdminPanelSettingsIcon sx={{fontSize:'3rem',marginBottom:'0.5rem'}}/>
               Admin
             </Button>
-          </Link>
         </Box>
       </Box>
       )}
