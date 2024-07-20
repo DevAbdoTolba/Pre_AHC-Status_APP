@@ -3,7 +3,7 @@ from datetime import datetime, date
 
 
 class Data:
-    def __init__(self, name, age=None, level=None, msg=None, important=False, status=None, _id=None):
+    def __init__(self, name, age=None, level=None, msg=None, important=False, status=None, _id=None,createDate=None,closeDate=None):
         try:
             self.id = _id if _id else ObjectId()
             self.name = name
@@ -14,10 +14,23 @@ class Data:
             else:
                 self.age = datetime.now().date()
 
+            self.closeDate = None  
             self.level = level
             self.msg = msg
             self.important = important
-            self.status = status if status is not None else "open"
+            self.status = 'close'
+            if createDate:
+                self.createDate = datetime.fromisoformat(createDate)
+            else:
+                self.createDate = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+            if status == "open":
+                self.closeDate = None
+            if status == "close" and closeDate:
+                self.closeDate = datetime.fromisoformat(closeDate)
+            elif status == "close" and closeDate==None:
+                self.closeDate =datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+            
+
         except Exception as e:
             raise ValueError(f"Error initializing Data object: {e}")
 
@@ -30,10 +43,14 @@ class Data:
                 "level": self.level,
                 "msg": self.msg,
                 "important": self.important,
-                "status": self.status
+                "status": self.status,
+                "createDate": self.createDate,
+                "closeDate": self.closeDate
             }
          except Exception as e:
             raise ValueError(f"Error converting Data object to dict: {e}")
+
+         
 
     @classmethod
     def from_dict(cls, data):
@@ -58,6 +75,9 @@ class Data:
             _id = data.get("_id")
             if _id:
                 _id = ObjectId(_id)
+            
+            
+            
 
             return cls(name=name, age=age, level=level, msg=msg, important=important, status=status, _id=_id)
         except Exception as e:

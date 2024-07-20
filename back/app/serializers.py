@@ -39,8 +39,24 @@ def serialize_data(data_model):
         if data_dict["important"] not in (True, False):
             raise SerializationError("Invalid value for field: important.")
 
-        if data_dict["status"] not in ("open", "closed"):
+        if data_dict["status"] not in ("open" , "close"):
             raise SerializationError("Invalid value for field: status.")
+        
+        if data_dict["status"] == "open" and data_dict["closeDate"]:
+            raise SerializationError("opened complaints can't have close date .")
+        
+        if data_dict["status"] == "close" and  data_dict["closeDate"]== None:
+            raise SerializationError("closed complaints must have close date.")
+        
+        if data_dict["status"] == "close" and data_dict["closeDate"]!= None:
+            if data_dict["closeDate"] < data_dict["createDate"] :
+                raise SerializationError("close date can't be before create date.")
+           
+        if data_dict["status"] == 'open':
+            if data_dict["createDate"]== None:
+                raise SerializationError(" complaints must have create date  .")
+        
+            
         
         return data_dict
     except Exception as e:

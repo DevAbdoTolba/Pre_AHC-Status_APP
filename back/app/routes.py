@@ -12,7 +12,6 @@ def home():
 @app.route('/create', methods=['POST'])
 def create():
     try:
-        
         if not request.json:
             return jsonify({'error': 'No data provided'}), 400
 
@@ -34,7 +33,7 @@ def create():
             return jsonify({'message': 'The complaint registered successfully'}), 201
         else:
             return jsonify({'error': 'An error occurred'}), 500
-
+        
     except (ValueError) as e:
         return jsonify({"error ": str(e)}), 400
     except Exception as e:
@@ -45,8 +44,11 @@ def create():
 @app.route('/get_all', methods=['GET'])
 def get_all():
     try:
+
         if request.method == 'GET':
          condition = {"status": {"$ne": "close"}}
+        # exceptThis={"createDate": 0, "closeDate": 0}
+
          data = db.data.find(condition)
          data_list = list(data)
          return jsonify(data_list)
