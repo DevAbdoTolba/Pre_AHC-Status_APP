@@ -2,49 +2,12 @@
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import * as React from 'react';
+import PriorityHighRoundedIcon from "@mui/icons-material/PriorityHighRounded";
+import { green, yellow, red } from "@mui/material/colors";
+import { useRouter } from "next/router";
+import { Button } from '@mui/material';
 
 
-
-  
- const columns: GridColDef<(typeof rows)[number]>[] = [
-  { field: "id", headerName: "ID", width: 150 },
-  {
-    field: "firstName",
-    headerName: "First name",
-    width: 150,
-    editable: true,
-
-  },
-  {
-    field: "status",
-    headerName: "status",
-    width: 150,
-  },
-  {
-    field: "level",
-    headerName: "Level",
-    width: 150,
-  },
-  {
-    field: "age",
-    headerName: "Age",
-    type: "date",
-    width: 150,
-    editable: false,
-  },
-  {
-    field: "important",
-    headerName: "important",
-
-    sortable: false,
-    width: 150,
-  },
-  {
-    field: "message",
-    headerName: "message",
-    width: 150,
-  },
-];
 
 const rows = [
   {
@@ -131,9 +94,82 @@ const rows = [
 ];
 
 
-   export default function DataGridDemo() {
+export default function DataGridDemo() {
+   const router = useRouter();
+
+   // Define the click handler for the "View" button
+   const handleViewClick = (id: number) => {
+     router.push(`/item/${id}`);
+   };
+     
+  const columns: GridColDef[] = [
+    { field: "id", headerName: "ID", width: 150 },
+    {
+      field: "firstName",
+      headerName: "First name",
+      width: 150,
+      editable: true,
+    },
+    { field: "status", headerName: "Status", width: 150 },
+    {
+      field: "level",
+      headerName: "Level",
+      width: 150,
+      renderCell: (params) => {
+        let color;
+        switch (params.value) {
+          case "easy":
+            color = green[500]; // MUI green color
+            break;
+          case "normal":
+            color = yellow[500]; // MUI yellow color
+            break;
+          case "high":
+          case "difficult":
+            color = red[500]; // MUI red color
+            break;
+          default:
+            color = "inherit"; // Default color
+        }
+        return <div style={{ color: color }}>{params.value}</div>;
+      },
+    },
+    {
+      field: "age",
+      headerName: "Age",
+      type: "date",
+      width: 150,
+      editable: false,
+    },
+    {
+      field: "important",
+      headerName: "Important",
+      width: 150,
+      renderCell: (params) =>
+        params.value === "true" ? (
+          <PriorityHighRoundedIcon sx={{ color: "yellow" }} />
+        ) : (
+          <div></div> 
+        ),
+    },
+    { field: "message", headerName: "Message", width: 150 },
+    {
+      field: "view",
+      headerName: "View",
+      width: 150,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleViewClick(params.row.id)}
+        >
+          View
+        </Button>
+      ),
+    },
+  ];
   return (
-    <Box sx={{ height: 400, width: '100%' }}>
+    <Box sx={{ height: 400, width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -145,9 +181,8 @@ const rows = [
           },
         }}
         pageSizeOptions={[5]}
-        
+        disableRowSelectionOnClick
       />
-      
     </Box>
   );
    };
