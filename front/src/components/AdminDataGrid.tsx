@@ -4,10 +4,77 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import * as React from 'react';
 import PriorityHighRoundedIcon from "@mui/icons-material/PriorityHighRounded";
 import { green, yellow, red } from "@mui/material/colors";
-import { useRouter } from "next/router";
-import { Button } from '@mui/material';
+import { Button, TextField } from '@mui/material';
+import Link from 'next/link';
 
 
+     
+  const columns: GridColDef[] = [
+    { field: "id", headerName: "ID", width: 150 },
+    { field: "firstName",headerName: "First name",width: 150,editable: true},
+    { field: "status", headerName: "Status", width: 150 },
+    {
+      field: "level",
+      headerName: "Level",
+      width: 150,
+      renderCell: (params) => {
+        let color;
+        switch (params.value) {
+          case "easy":
+            color = green[500]; // MUI green color
+            break;
+          case "normal":
+            color = yellow[500]; // MUI yellow color
+            break;
+          case "hard":
+            color = red[500]; // MUI red color
+            break;
+        }
+        return (
+          <TextField
+            value={params.value}
+            InputProps={{
+              style: { color: color },
+            }}
+          />
+        );
+      },
+    },
+    {
+      field: "age",
+      headerName: "Age",
+      type: "date",
+      width: 150,
+      editable: false,
+    },
+    {
+      field: "important",
+      headerName: "Important",
+      width: 150,
+      renderCell: (params) =>
+        params.value === "true" ? (
+          <PriorityHighRoundedIcon sx={{ color: "yellow" }} />
+        ) : (
+          <></>
+        ),
+    },
+    { field: "message", headerName: "Message", width: 150 },
+    {
+      field: "view",
+      headerName: "View",
+      width: 150,
+      renderCell: (params) => (
+        <Button
+          component={Link}
+          href={`/item/${params.row.id}`}
+          variant="contained"
+          color="primary"
+        >
+          View
+        </Button>
+      ),
+    },
+  ];
 
 const rows = [
   {
@@ -39,7 +106,7 @@ const rows = [
   },
   {
     id: 4,
-    level: "high",
+    level: "hard",
     firstName: "Arya",
     age: new Date("2000-02-05"),
     important: "false",
@@ -48,7 +115,7 @@ const rows = [
   },
   {
     id: 5,
-    level: "difficult",
+    level: "hard",
     firstName: "Daenerys",
     age: new Date("2000-02-05"),
     important: "true",
@@ -66,7 +133,7 @@ const rows = [
   },
   {
     id: 7,
-    level: null,
+    level: "hard",
     firstName: "Ferrara",
     age: new Date("2000-02-05"),
     important: "ture",
@@ -84,7 +151,7 @@ const rows = [
   },
   {
     id: 9,
-    level: "difficult",
+    level: "hard",
     firstName: "Harvey",
     age: new Date("2000-02-05"),
     important: "false",
@@ -95,79 +162,7 @@ const rows = [
 
 
 export default function DataGridDemo() {
-   const router = useRouter();
-
-   // Define the click handler for the "View" button
-   const handleViewClick = (id: number) => {
-     router.push(`/item/${id}`);
-   };
-     
-  const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 150 },
-    {
-      field: "firstName",
-      headerName: "First name",
-      width: 150,
-      editable: true,
-    },
-    { field: "status", headerName: "Status", width: 150 },
-    {
-      field: "level",
-      headerName: "Level",
-      width: 150,
-      renderCell: (params) => {
-        let color;
-        switch (params.value) {
-          case "easy":
-            color = green[500]; // MUI green color
-            break;
-          case "normal":
-            color = yellow[500]; // MUI yellow color
-            break;
-          case "high":
-          case "difficult":
-            color = red[500]; // MUI red color
-            break;
-          default:
-            color = "inherit"; // Default color
-        }
-        return <div style={{ color: color }}>{params.value}</div>;
-      },
-    },
-    {
-      field: "age",
-      headerName: "Age",
-      type: "date",
-      width: 150,
-      editable: false,
-    },
-    {
-      field: "important",
-      headerName: "Important",
-      width: 150,
-      renderCell: (params) =>
-        params.value === "true" ? (
-          <PriorityHighRoundedIcon sx={{ color: "yellow" }} />
-        ) : (
-          <div></div> 
-        ),
-    },
-    { field: "message", headerName: "Message", width: 150 },
-    {
-      field: "view",
-      headerName: "View",
-      width: 150,
-      renderCell: (params) => (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleViewClick(params.row.id)}
-        >
-          View
-        </Button>
-      ),
-    },
-  ];
+  
   return (
     <Box sx={{ height: 400, width: "100%" }}>
       <DataGrid
