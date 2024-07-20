@@ -3,10 +3,9 @@ import Box from '@mui/material/Box';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import * as React from 'react';
 import PriorityHighRoundedIcon from "@mui/icons-material/PriorityHighRounded";
-import { green, yellow, red } from "@mui/material/colors";
-import { Button, TextField } from '@mui/material';
+import { green, yellow, red ,blue } from "@mui/material/colors";
+import { Button, Typography } from '@mui/material';
 import Link from 'next/link';
-
 
      
   const columns: GridColDef[] = [
@@ -31,12 +30,12 @@ import Link from 'next/link';
             break;
         }
         return (
-          <TextField
-            value={params.value}
-            InputProps={{
-              style: { color: color },
-            }}
-          />
+          <Typography
+            sx={{ color: color }}
+            variant="body1"
+          >
+            {params.value}
+          </Typography>
         );
       },
     },
