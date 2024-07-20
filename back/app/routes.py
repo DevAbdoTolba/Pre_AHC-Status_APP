@@ -47,9 +47,9 @@ def get_all():
 
         if request.method == 'GET':
          condition = {"status": {"$ne": "close"}}
-        # exceptThis={"createDate": 0, "closeDate": 0}
+         exceptThis={"createDate": 0, "closeDate": 0}
 
-         data = db.data.find(condition)
+         data = db.data.find(condition,exceptThis)
          data_list = list(data)
          return jsonify(data_list)
     except Exception as e:

@@ -18,7 +18,7 @@ class Data:
             self.level = level
             self.msg = msg
             self.important = important
-            self.status = 'close'
+            self.status = status if status is not None else "open"
             if createDate:
                 self.createDate = datetime.fromisoformat(createDate)
             else:
@@ -27,7 +27,7 @@ class Data:
                 self.closeDate = None
             if status == "close" and closeDate:
                 self.closeDate = datetime.fromisoformat(closeDate)
-            elif status == "close" and closeDate==None:
+            elif status == "close":
                 self.closeDate =datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
             
 
@@ -49,7 +49,6 @@ class Data:
             }
          except Exception as e:
             raise ValueError(f"Error converting Data object to dict: {e}")
-
          
 
     @classmethod
@@ -75,9 +74,6 @@ class Data:
             _id = data.get("_id")
             if _id:
                 _id = ObjectId(_id)
-            
-            
-            
 
             return cls(name=name, age=age, level=level, msg=msg, important=important, status=status, _id=_id)
         except Exception as e:

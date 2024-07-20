@@ -52,9 +52,8 @@ def serialize_data(data_model):
             if data_dict["closeDate"] < data_dict["createDate"] :
                 raise SerializationError("close date can't be before create date.")
            
-        if data_dict["status"] == 'open':
-            if data_dict["createDate"]== None:
-                raise SerializationError(" complaints must have create date  .")
+        if data_dict["status"] == 'open'and data_dict["createDate"]== None:
+         raise SerializationError(" complaints must have create date  .")
         
             
         
