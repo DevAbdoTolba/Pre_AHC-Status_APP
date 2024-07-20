@@ -59,7 +59,6 @@ class Data:
             important = data.get("important", False)
 
             status = data.get("status", "open")
-          
             _id = data.get("_id")
             if _id:
                 _id = ObjectId(_id)
@@ -69,7 +68,7 @@ class Data:
             raise ValueError(f"Error creating Data object from dict: {e}")
         
     @staticmethod
-    def get_statistics():
+    def get_statistics():#yasser
         all_records = db.data.find({}).sort([("age", 1)])
         avg_age=0
         level_distribution={
