@@ -39,7 +39,9 @@ def serialize_data(data_model):
         if data_dict["important"] not in (True, False):
             raise SerializationError("Invalid value for field: important.")
 
+
         if data_dict["status"] not in ("open" , "close"):
+
             raise SerializationError("Invalid value for field: status.")
         
         if data_dict["status"] == "open" and data_dict["closeDate"]:
@@ -93,7 +95,7 @@ def deserialize_data(data):
         if 'important' in data and data['important'] not in (True, False):
             raise DeserializationError("Invalid value for field: important.")
         
-        if 'status' in data and data['status'] not in ("open", "closed"):
+        if 'status' in data and data['status'] not in ("open", "close"):
             raise DeserializationError("Invalid value for field: status.")
         
         data_model = Data.from_dict(data)
