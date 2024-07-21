@@ -153,15 +153,15 @@ def delete_all():
                           i += 1
 
                         file_path = os.path.join(backup_dir, f"bk{i}.json")
-
-                        try:
-                                json.dump(data_list, f)
-                        except base64.binascii.Error:
-                                return jsonify({'error': 'try again after 24 days'}), 400
+                        json.dump(data_list, f)                        
                         db.data.drop()
                         return jsonify({'message': 'All complaints deleted successfully'})
+        except base64.binascii.Error:
+                        return jsonify({'error': 'try again after 24 days'}), 400        
         except Exception as e:
-                return str(e)
+               return jsonify({'error': 'something went wrong '}), 500       
+        
+        
         
 @app.route('/stats', methods = ['GET'])
 def data_visualization():
