@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { GetServerSideProps } from 'next';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import ItemView from '../../components/ItemView';
 
 interface RowData {
@@ -12,24 +13,25 @@ interface RowData {
   status: string;
 }
 
-interface ItemPageProps {
-  data: RowData[];
-}
+const ItemPage: React.FC = () => {
+  const [data, setData] = useState<RowData[]>([]);
+  const router = useRouter();
+  const { id } = router.query;
 
-const ItemPage: React.FC<ItemPageProps> = ({ data }) => {
-  return <ItemView data={data} />;
+  useEffect(() => {
+    if (id) {
+      fetch(`/api/get/${id}`)
+        .then((res) => {
+        return  res.json();
+        })
+        .then((result) => {
+          setData(result.data);
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        });
+    }
+  }, [id]);
+
+  return <ItemView/>;
 };
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.params!;
-  const response = await fetch(`api/get/${id}`);
-  const data = (await response.json()).data;
-
-  return {
-    props: {
-      data,
-    },
-  };
-};
-
-export default ItemPage;
