@@ -43,20 +43,72 @@ def create():
 
 @app.route('/get_all', methods=['GET'])
 def get_all():
-    try:
 
-        if request.method == 'GET':
+        try:
+                if request.method == 'GET':
+                        condition = {"status": {"$ne": "close"}}
+                        projection = {"createDate": 0, "closeDate": 0}
+                        data = db.data.find(condition, projection)
+                        data_list = list(data)
+                        return jsonify(data_list)
+        except Exception as e:
+                return str(e)
 
-         condition = {"status": {"$ne": "close"}}
-         exceptThis={"createDate": 0, "closeDate": 0}
 
-         data = db.data.find(condition,exceptThis)
-         data_list = list(data)
-         return jsonify(data_list)
-        
-    except Exception as e:
-        return str(e)
-    
+@app.route('/get_status/<status>', methods=['GET'])
+def get_status(status):
+        try:
+                if request.method == 'GET':
+                        if status != "open" and status != "close":
+                                return jsonify({'error': 'Invalid status , status should be only : "open" or "close" '}), 400  #bad request
+                        condition = {"status": status}
+                        projection = {"createDate": 0, "closeDate": 0}
+                        data = db.data.find(condition, projection)
+                        data_list = list(data)
+                        return jsonify(data_list)
+        except Exception as e:
+                return str(e)
+
+
+@app.route('/get_level/<level>', methods=['GET'])
+def get_level(level):
+        try:
+                if request.method == 'GET':
+                        if level != "easy" and level != "normal" and level != "hard":
+                                return jsonify({'error': 'Invalid level , level should be only : "easy" or "normal" or "hard" '}), 400 
+                        condition = {"level": level}
+                        projection = {"createDate": 0, "closeDate": 0}
+                        data = db.data.find(condition, projection)
+                        data_list = list(data)
+                        return jsonify(data_list)
+        except Exception as e:
+                return str(e)
+
+
+@app.route('/get/<id>', methods=['GET'])
+def get(id):
+        try:
+                if request.method == 'GET':
+                        if not db.data.find_one({"_id": id}):
+                                return jsonify({'error': 'Invalid id'}), 400
+                        condition = {"_id": id}
+                        projection = {"createDate": 0, "closeDate": 0}
+                        data = db.data.find_one(condition, projection)
+                        return jsonify(data)
+        except Exception as e:
+                return str(e)
+
+@app.route('/get_important', methods=['GET'])
+def get_important():
+        try:
+                if request.method == 'GET':
+                        condition = {"important": True}
+                        projection = {"createDate": 0, "closeDate": 0}
+                        data = db.data.find(condition, projection)
+                        data_list = list(data)
+                        return jsonify(data_list)
+        except Exception as e:
+                return str(e)
 
 @app.route('/stats', methods = ['GET'])
 def data_visualization():
