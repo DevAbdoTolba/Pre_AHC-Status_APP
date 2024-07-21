@@ -8,7 +8,7 @@ import re
 
 
 class Data:
-    def __init__(self, name, createDate, age=None, level=None, msg=None, important=False, status=None, _id=None, closeDate=None):
+    def __init__(self, name, createDate=None, age=None, level=None, msg=None, important=False, status=None, _id=None, closeDate=None):
         try:
             self.id = _id if _id else ObjectId()
             self.name = name
