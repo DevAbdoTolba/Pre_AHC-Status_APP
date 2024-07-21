@@ -3,7 +3,7 @@ from datetime import datetime, date
 
 
 class Data:
-    def __init__(self, name, age=None, level=None, msg=None, important=False, status=None, _id=None,createDate=None,closeDate=None):
+    def __init__(self, name, createDate, age=None, level=None, msg=None, important=False, status=None, _id=None, closeDate=None):
         try:
             self.id = _id if _id else ObjectId()
             self.name = name
@@ -19,14 +19,15 @@ class Data:
             self.msg = msg
             self.important = important
             self.status = status if status is not None else "open"
-            if createDate:
-                self.createDate = datetime.fromisoformat(createDate)
+            if createDate is not None:
+                datetime.strptime(createDate, "%Y-%m-%dT%H:%M:%S")
+                self.createDate = createDate
             else:
                 self.createDate = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
             if status == "open":
                 self.closeDate = None
             if status == "close" and closeDate:
-                self.closeDate = datetime.fromisoformat(closeDate)
+                self.closeDate = closeDate.strftime("%Y-%m-%dT%H:%M:%S")
             elif status == "close":
                 self.closeDate =datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
             

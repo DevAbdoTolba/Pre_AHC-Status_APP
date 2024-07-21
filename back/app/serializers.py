@@ -11,9 +11,10 @@ class DeserializationError(Exception):
 def serialize_data(data_model):
     if not isinstance(data_model, Data):
         raise TypeError("Input is not a Data model instance.")
-    
+   
     try:
         data_dict = data_model.to_dict()
+        create_date = datetime.strptime(data_dict["createDate"], "%Y-%m-%dT%H:%M:%S").date()
 
         if not data_dict['name'] or data_dict['name'].strip() == "":
             raise SerializationError("Name field cannot be empty.")
@@ -54,6 +55,9 @@ def serialize_data(data_model):
            
         if data_dict["status"] == 'open'and data_dict["createDate"]== None:
          raise SerializationError(" complaints must have create date  .")
+        
+        if create_date > datetime.now().date():
+         raise SerializationError("Create date cannot be in the future.")
         
             
         
