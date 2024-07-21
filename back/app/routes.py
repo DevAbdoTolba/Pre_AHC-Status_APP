@@ -43,6 +43,7 @@ def create():
 
 @app.route('/get_all', methods=['GET'])
 def get_all():
+
         try:
                 if request.method == 'GET':
                         condition = {"status": {"$ne": "close"}}
@@ -52,7 +53,7 @@ def get_all():
                         return jsonify(data_list)
         except Exception as e:
                 return str(e)
-    
+
 
 @app.route('/get_status/<status>', methods=['GET'])
 def get_status(status):
