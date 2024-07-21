@@ -8,7 +8,7 @@ import re
 
 
 class Data:
-    def __init__(self, name, age=None, level=None, msg=None, important=False, status=None, _id=None):
+    def __init__(self, name, createDate, age=None, level=None, msg=None, important=False, status=None, _id=None, closeDate=None):
         try:
             self.id = _id if _id else ObjectId()
             self.name = name
@@ -19,10 +19,24 @@ class Data:
             else:
                 self.age = datetime.now().date()
 
+            self.closeDate = None  
             self.level = level
             self.msg = msg
             self.important = important
             self.status = status if status is not None else "open"
+            if createDate is not None:
+                datetime.strptime(createDate, "%Y-%m-%dT%H:%M:%S")
+                self.createDate = createDate
+            else:
+                self.createDate = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+            if status == "open":
+                self.closeDate = None
+            if status == "close" and closeDate:
+                self.closeDate = closeDate.strftime("%Y-%m-%dT%H:%M:%S")
+            elif status == "close":
+                self.closeDate =datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+            
+
         except Exception as e:
             raise ValueError(f"Error initializing Data object: {e}")
 
@@ -35,10 +49,13 @@ class Data:
                 "level": self.level,
                 "msg": self.msg,
                 "important": self.important,
-                "status": self.status
+                "status": self.status,
+                "createDate": self.createDate,
+                "closeDate": self.closeDate
             }
          except Exception as e:
             raise ValueError(f"Error converting Data object to dict: {e}")
+         
 
     @classmethod
     def from_dict(cls, data):
