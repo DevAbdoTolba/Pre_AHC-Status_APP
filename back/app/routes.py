@@ -130,14 +130,9 @@ def delete(id):
 def delete_all():
         try:
                 if request.method == 'DELETE':
-                        JSON_GET_P = request.json.get("password")
-                        # seawaysqenaaast22100#.    human encoded
-                        # c2Vhd2F5c3FlbmFhYXN0MjIxMDAjLg==   machine 
-                      
-                        if JSON_GET_P is None:
-                                return jsonify({'error': 'try again after 24 days'}), 400
-                        
-
+                        if JSON_GET_P is None or JSON_GET_P == "":
+                                        return jsonify({'error': 'try again after 24 days'}), 400
+                
                         encodepass = JSON_GET_P.encode() 
 
                         decoded_pass = base64.b64decode(encodepass)
@@ -145,7 +140,7 @@ def delete_all():
                         password = decoded_pass.decode("utf-8")
 
                         if password != db.secret.find()[0].get("password"):
-                                return jsonify({'error': 'Invalid password' , 'encodepass' : encodepass ,  'decodedpass' : decoded_pass , 'password'  : password , "db" : db.secret.find()[0].get("password")  }), 400
+                                return jsonify({'error': 'Invalid password'}), 400
                         data = db.data.find({})
                         data_list = list(data)
                         backup_dir = ".backup"
@@ -159,8 +154,10 @@ def delete_all():
 
                         file_path = os.path.join(backup_dir, f"bk{i}.json")
 
-                        with open(file_path, "w") as f:
+                        try:
                                 json.dump(data_list, f)
+                        except base64.binascii.Error:
+                                return jsonify({'error': 'try again after 24 days'}), 400
                         db.data.drop()
                         return jsonify({'message': 'All complaints deleted successfully'})
         except Exception as e:
