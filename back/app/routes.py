@@ -97,6 +97,18 @@ def get(id):
         except Exception as e:
                 return str(e)
 
+@app.route('/get_important', methods=['GET'])
+def get_important():
+        try:
+                if request.method == 'GET':
+                        condition = {"important": True}
+                        projection = {"createDate": 0, "closeDate": 0}
+                        data = db.data.find(condition, projection)
+                        data_list = list(data)
+                        return jsonify(data_list)
+        except Exception as e:
+                return str(e)
+
 @app.route('/stats', methods = ['GET'])
 def data_visualization():
     try:
