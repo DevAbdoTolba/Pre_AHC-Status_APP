@@ -1,118 +1,246 @@
-import React, { useState } from 'react';
-import { Control, FieldErrors, FormState, useForm, UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
+import React, { useState } from "react";
+import {
+       TextField,
+       Button,
+       CircularProgress,
+       Alert,
+       MenuItem,
+       Select,
+       FormControl,
+       InputLabel,
+       Container,
+       Paper,
+       Typography,
+} from "@mui/material";
+import { SelectChangeEvent } from "@mui/material/Select";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { pink, teal } from "@mui/material/colors";
+import { useForm, Controller } from "react-hook-form";
+import { json } from "stream/consumers";
+
+// Custom theme
+const theme = createTheme({
+       palette: {
+              primary: {
+                     main: teal[500],
+              },
+              secondary: {
+                     main: pink[500],
+              },
+       },
+});
+
+const levels = ["Easy", "Normal", "Hard"];
 
 type FormValues = {
-       username: string,
-       birthDate: Date,
-       level: string,
-       message: string
+       username: string;
+       birthDate: string;
+       level: string;
+       message: string;
 };
 
-const UserForm: React.FC = () => {
+const UserFormDesign: React.FC = () => {
+       const {
+              handleSubmit,
+              register,
+              control, reset,
+              formState: { errors },
+       } = useForm<FormValues>();
+       const [loading, setLoading] = useState(false);
+       const [success, setSuccess] = useState(false);
+       const [error, setError] = useState<string | null>(null);
 
-       
-const { handleSubmit, register, formState } = useForm<FormValues>();
-const { errors } = formState;
-  
-// Important validation function
-function hasSpecialCharacters(input: string): string | boolean {
-       return (/^[A-Za-z\u0600-\u06FF\s]+$/.test(input)
-              || "special characters and digits not allowed");
-}
-
-function isUserNameVeryBig(input: string): string | boolean {
-      return (input.length < 50 || "Your Name is very Big");
-}
-
-
-function isMessageBig(input: string): string | boolean {
-      return (input.length < 200 || "Message is very Big");
-}
+       const onSubmit = async (data: FormValues) => {
+              setLoading(true);
+              setError(null);
+              setSuccess(false);
 
 
+              fetch("/api/post/create",
+                     {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(data)
+                     }
+              ).then((result) => {
+                     if (result?.ok) {
+                            setSuccess(true);
+                     }
+                     else {
+                            throw new Error();
+                     }
 
-       // Handle submit 
-       function onSubmit(data: FormValues) {
-              saveUserData(data);  
-       }
-       // Uset Name Register validation
-       function NameRegister():object
-       {
-              return {
-               ...register('username',{
-                     required: "UserName is Required",
-                     validate: {
-                            NoBigMsg: (input) => isUserNameVeryBig(input),
-                            NoSpecialLetters: (input) => hasSpecialCharacters(input),
-                            }
-               }
-               )
-               };
-       }
-       // Date register Validation
-       function DateRegister():object
-       {
-              return {...register('birthDate' ,{valueAsDate:true ,  required: "Date is Required"})}
-       }
-       // Difficulty register Validation
-       function DifficultyRegister():object
-       {
-              return {...register('level' ,{required:"Difficulty  field is require" , validate:{NotEmpty:(input)=> input!=="" || "Difficulty field is require"}})};
-       }
-       //  message register Validation
-       function MessageRegister():object
-       {
-              return {...register('message' ,{required:"message field is require" , validate:{NoBigMsg:(input)=>isMessageBig(input) , NoSpecialLetters: (input) => hasSpecialCharacters(input)}})};
-       }
-// Send Data to the server
-   const saveUserData = async (formData: FormValues) => {
-    try {
-      const response = await fetch('/api/post/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
+              }).
+                     catch((e) => {
+                            setSuccess(false);
+                            setError("Submission failed");
+                     }).finally(() => {
+                            setLoading(false);
+                            reset();
+                     })
+       };
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
+       // Validation functions
+       const hasSpecialCharacters = (input: string) =>
+              /^[A-Za-z\u0600-\u06FF\s]+$/.test(input) ||
+              "Special characters and digits not allowed";
+       const isUserNameVeryBig = (input: string) =>
+              input.length < 50 || "Your Name is very Big";
+       const isMessageBig = (input: string) =>
+              input.length < 200 || "Message is very Big";
 
-      const data = await response.json();
-      console.log(data); 
-    } catch (error) {
-      console.error('There has been a problem with your fetch operation:', error);
-    }
-  };
- 
+       return (
+              <ThemeProvider theme={theme}>
+                     <Container
+                            maxWidth="sm"
+                            sx={{
+                                   display: "flex",
+                                   flexDirection: "column",
+                                   alignItems: "center",
+                                   justifyContent: "center",
+                                   height: "90vh",
+                                   backgroundColor: "#e0f7fa",
+                                   boxShadow: "0 8px 16px rgba(0, 0, 0, 0.3)",
+                                   borderStyle: "hidden solid solid solid",
+                                   borderColor: "white",
+                                   borderRadius: "0 0 3rem 3rem",
+                                   opacity: 0.8,
+                                   background: `
+                                     radial-gradient(circle, transparent 20%, #e5e5f7 20%, #e5e5f7 80%, transparent 80%, transparent),
+                                     radial-gradient(circle, transparent 20%, #e5e5f7 20%, #e5e5f7 80%, transparent 80%, transparent) 25px 25px,
+                                     linear-gradient(#009788 2px, transparent 2px) 0 -1px,
+                                     linear-gradient(90deg, #009788 2px, #e5e5f7 2px) -1px 0
+                                   `,
+                                   backgroundSize: '50px 50px, 50px 50px, 25px 25px, 25px 25px',
+                                   // padding: '20px'
 
-      
+                            }}
+                     >
+                            <Paper
+                                   elevation={3}
+                                   sx={{
+                                          padding: "2rem",
+                                          borderRadius: "10px",
+                                          maxWidth: "400px",
+                                          width: "100%",
+                                          backgroundColor: "rgba(255, 255, 255, 0.8)",
+                                          overflow: "hidden",
+                                   }}
+                            >
+                                   <Typography
+                                          variant="h4"
+                                          align="center"
+                                          color="primary"
+                                          gutterBottom
+                                          sx={{
+                                                 fontWeight: "bold",
+                                                 color: teal[800],
+                                          }}
+                                   >
+                                          User Form
+                                   </Typography>
+                                   <form
+                                          onSubmit={handleSubmit(onSubmit)}
+                                          style={{
+                                                 display: "flex",
+                                                 flexDirection: "column",
+                                                 gap: "1rem",
+                                          }}
+                                   >
+                                          {success && (
+                                                 <Alert severity="success">Form submitted successfully!</Alert>
+                                          )}
+                                          {error && <Alert severity="error">{error}</Alert>}
 
- return (<>
-               <form onSubmit={handleSubmit(onSubmit)} >
-                     {/* Name Input Field */}
-                     <input required  type='text' id='name' placeholder='Name' {...NameRegister()} />
-                     <p>{ errors.username?.message}</p>
-                     {/* BithDate Input Field */}
-                     <input required id='date' type='date' {...DateRegister()} />
-                      <p >{errors.birthDate?.message}</p>
-                     {/* Difficulty Level */}
-                     <select required  {...DifficultyRegister()}>
-                            <option value="" disabled selected>Level</option>
-                            <option>Easy</option>
-                            <option>Medium</option>
-                            <option>Hard</option>
-                     </select>
-                      <p >{errors.level?.message}</p>
-                     {/* Main Message */}
-                     <textarea required placeholder='Message' id='confirm' {...MessageRegister()} /> 
-                     <p>{errors.message?.message}</p>
-                     {/* ------------------------------------- */}
-                     <button className="btn my-4" >Submit</button>
-              </form >         
-       </>
+                                          <TextField
+                                                 label="Name"
+                                                 {...register("username", {
+                                                        required: "UserName is Required",
+                                                        validate: {
+                                                               NoBigMsg: isUserNameVeryBig,
+                                                               NoSpecialLetters: hasSpecialCharacters,
+                                                        },
+                                                 })}
+                                                 error={!!errors.username}
+                                                 helperText={errors.username?.message ? errors.username?.message : " "}
+                                                 variant="outlined"
+                                                 sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+                                          />
+
+                                          <TextField
+                                                 label="Age"
+                                                 type="date"
+                                                 {...register("birthDate", { required: "Date is Required" })}
+                                                 InputLabelProps={{ shrink: true }}
+                                                 error={!!errors.birthDate}
+                                                 helperText={errors.birthDate?.message ? errors.birthDate?.message : " "}
+                                                 variant="outlined"
+                                                 sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+                                          />
+
+                                          <FormControl
+                                                 variant="outlined"
+                                                 error={!!errors.level}
+                                                 sx={{ borderRadius: 2 }}
+                                          >
+                                                 <InputLabel id="level-label">Level</InputLabel>
+                                                 <Controller
+                                                        name="level"
+                                                        control={control}
+                                                        defaultValue=""
+                                                        rules={{ required: "Difficulty field is required" }}
+                                                        render={({ field }) => (
+                                                               <Select labelId="level-label" label="Level" {...field}>
+                                                                      {levels.map((level) => (
+                                                                             <MenuItem key={level} value={level}>
+                                                                                    {level}
+                                                                             </MenuItem>
+                                                                      ))}
+                                                               </Select>
+                                                        )}
+                                                 />
+                                                 {errors.level ? (
+                                                        <Typography variant="body2" color="error">
+                                                               {errors.level.message}
+                                                        </Typography>
+                                                 ) : (
+                                                        <Typography variant="body2" color="error">
+                                                               {'\u00A0'}
+                                                        </Typography>
+                                                 )}
+                                          </FormControl>
+
+                                          <TextField
+                                                 label="Message"
+                                                 {...register("message", {
+                                                        required: "Message field is required",
+                                                        validate: {
+                                                               NoBigMsg: isMessageBig,
+                                                               NoSpecialLetters: hasSpecialCharacters,
+                                                        },
+                                                 })}
+                                                 multiline
+                                                 rows={4}
+                                                 error={!!errors.message}
+                                                 helperText={errors.message?.message ? errors.message?.message : " "}
+                                                 variant="outlined"
+                                                 sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+                                          />
+
+                                          <Button
+                                                 type="submit"
+                                                 variant="contained"
+                                                 color="primary"
+                                                 disabled={loading}
+                                                 sx={{ marginTop: "1rem", borderRadius: 2, textTransform: "none" }}
+                                          >
+                                                 {loading ? <CircularProgress size={24} /> : "Submit"}
+                                          </Button>
+                                   </form>
+                            </Paper>
+                     </Container>
+              </ThemeProvider>
        );
 };
 
-export default UserForm;
+export default UserFormDesign;

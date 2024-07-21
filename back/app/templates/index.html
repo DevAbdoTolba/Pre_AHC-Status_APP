@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            flex-direction: column;
+            background-color: #616161;
+        }
+
+        .charts-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            width: 100%;
+            max-width: 1800px;
+            gap: 30px;
+        }
+
+        .chart-container,
+        .pie-container,
+        .bar-container,
+        .fourth-chart-container {
+            border: 1px solid black;
+            background-color: #f0f0f0;
+            position: relative;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            height: 400px;
+            width: 300px;
+            background-color: #1d7171;
+        }
+        
+        .column {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100px;
+            background-color: lightblue;
+            margin: 0 10px;
+            position: relative;
+            font-weight: bold;
+        }
+        
+        .column2 {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100px;
+            background-color: rgb(144, 82, 6);
+            margin: 0 10px;
+            position: relative;
+            font-weight: bold;
+        }
+
+        .label {
+            position: absolute;
+            bottom: -20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .column-label {
+            position: absolute;
+            top: -20px;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .title {
+            position: absolute;
+            top: -40px;
+            width: 100%;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .pie-container {
+            width: 400px; 
+            height: 400px; 
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #6b3232;
+        }
+
+        .pie-chart {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            background: conic-gradient(
+                #66524B 0% {{ level_distribution[0][1] }}%, 
+                #DD6DA0 {{ level_distribution[0][1] }}% {{ level_distribution[0][1] + level_distribution[1][1] }}%, 
+                #0F6D72 {{ level_distribution[0][1] + level_distribution[1][1] }}% 100%
+            );
+            
+        }
+
+        .pie-chart::after {
+            content: "";
+            display: block;
+            width: 60%; 
+            height: 60%;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            z-index: 1;
+        }
+
+        .pie-labels {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 2;
+            color: black; 
+        }
+
+        .pie-labels div {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .bar-container {
+            display: flex;
+            align-items: flex-end;
+            height: 400px;
+            width: 300px;
+            background-color: black;
+            color: white;
+        }
+
+        
+        .bar {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100px;
+            background-color: lightcoral;
+            margin: 0 10px;
+            position: relative;
+        }
+
+        .bar2 {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100px;
+            background-color: lightgreen;
+            margin: 0 10px;
+            position: relative;
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .fourth-chart-container {
+            height: 400px;
+            width: 700px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .fourth-bar {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100px;
+            background-color: rgb(205 0 0 / 41%);
+            margin: 0 10px;
+            position: relative;
+        }
+
+        .fourth-bar2 {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100px;
+            background-color: #37505d;
+            margin: 0 10px;
+            position: relative;
+        }
+        .fourth-bar3 {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100px;
+            background-color: #3bb8fb;
+            margin: 0 10px;
+            position: relative;
+        }
+        .fourth-bar4 {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100px;
+            background-color: #a55bff;
+            margin: 0 10px;
+            position: relative;
+        }
+        .fourth-bar5 {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100px;
+            background-color: #889725;
+            margin: 0 10px;
+            position: relative;
+        }
+        .fourth-bar6 {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100px;
+            background-color: #a93636e4;
+            margin: 0 10px;
+            position: relative;
+        }
+        .fourth-bar7 {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100px;
+            background-color: #8d5225;
+            margin: 0 10px;
+            position: relative;
+        }
+        .fourth-bar8 {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100px;
+            background-color: #b03baa;
+            margin: 0 10px;
+            position: relative;
+        }
+        .fourth-bar9 {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100px;
+            background-color: #3da55c;
+            margin: 0 10px;
+            position: relative;
+        }
+        .fourth-bar10 {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100px;
+            background-color: #000000;
+            margin: 0 10px;
+            position: relative;
+        }
+
+        .fourth-bar-label {
+            position: absolute;
+            bottom: -20px;
+            width: 100%;
+            text-align: center;
+        }
+        .stats{
+            nav-up: 100px;
+            position: absolute;
+            top: 20px;
+        }
+        .avg{
+            position: absolute;
+            top: 150px;
+            left: 40px;
+            font-size: 20px;
+        }
+        .form{
+            position: absolute;
+            top: 50px;
+            right: 40px;
+            
+        }
+        .no_complaint{
+            position: absolute;
+            top: 100px;
+            left: 40px;
+            font-size: 25px;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <div class="stats"><h1>stats</h1></div>
+    <div class="avg"><h3>average age : {{avg_age}}</h3></div>
+    <div class="no_complaint"><h3>number of complaint : {{no_complaint}}</h3></div>
+    <div class="charts-wrapper">
+        
+        <div class="chart-container">
+            <div class="column" id="column1">
+                <div class="column-label">{{important_frequency[0]}}</div>
+                <div class="label">True</div>
+            </div>
+            <div class="column2" id="column2">
+                <div class="column-label">{{important_frequency[1]}}</div>
+                <div class="label">False</div>
+            </div>
+            <div class="title">important_frequencey_rate</div>
+        </div>
+
+        
+        <div class="pie-container">
+            <div class="pie-chart"></div>
+            <div class="pie-labels">
+                <div style="color: #66524B; font-size:large;"><strong>easy: {{ level_distribution[0][1] }}%</strong></div>
+                <div style="color: #DD6DA0; font-size:large;"><strong>normal: {{ level_distribution[1][1] }}%</strong></div>
+                <div style="color: #0F6D72; font-size:large;"><strong>hard: {{ level_distribution[2][1] }}%</strong></div>
+            </div>
+            <div class="title">level_distribution</div>
+        </div>
+
+        
+        <div class="bar-container">
+            <div class="bar" id="bar1">
+                <div class="column-label">{{status_frequency[0]}}</div>
+                <div class="bar-label"><b>open</b></div>
+            </div>
+            <div class="bar2" id="bar2">
+                <div class="column-label">{{status_frequency[1]}}</div>
+                <div class="bar-label"><b>close</b></div>
+            </div>
+            <div class="title" style="color: black;">status_frequency</div>
+        </div>
+
+        
+        <div class="fourth-chart-container" style="width: 500;">
+            <div class="fourth-bar" id="fourth-bar1">
+                <div class="column-label">{{common_words_in_msg[0][1]}}</div>
+                <div class="fourth-bar-label"><b>{{common_words_in_msg[0][0]}}</b></div>
+            </div>
+            <div class="fourth-bar2" id="fourth-bar2">
+                <div class="column-label">{{common_words_in_msg[1][1]}}</div>
+                <div class="fourth-bar-label"><b>{{common_words_in_msg[1][0]}}</b></div>
+            </div>
+            <div class="fourth-bar3" id="fourth-bar3">
+                <div class="column-label">{{common_words_in_msg[2][1]}}</div>
+                <div class="fourth-bar-label"><b>{{common_words_in_msg[2][0]}}</b></div>
+            </div>
+            <div class="fourth-bar4" id="fourth-bar4">
+                <div class="column-label">{{common_words_in_msg[3][1]}}</div>
+                <div class="fourth-bar-label"><b>{{common_words_in_msg[3][0]}}</b></div>
+            </div>
+            <div class="fourth-bar5" id="fourth-bar5">
+                <div class="column-label">{{common_words_in_msg[4][1]}}</div>
+                <div class="fourth-bar-label"><b>{{common_words_in_msg[4][0]}}</b></div>
+            </div>
+            <div class="fourth-bar6" id="fourth-bar6">
+                <div class="column-label">{{common_words_in_msg[5][1]}}</div>
+                <div class="fourth-bar-label"><b>{{common_words_in_msg[5][0]}}</b></div>
+            </div>
+            <div class="fourth-bar7" id="fourth-bar7">
+                <div class="column-label">{{common_words_in_msg[6][1]}}</div>
+                <div class="fourth-bar-label"><b>{{common_words_in_msg[6][0]}}</b></div>
+            </div>
+            <div class="fourth-bar8" id="fourth-bar8">
+                <div class="column-label">{{common_words_in_msg[7][1]}}</div>
+                <div class="fourth-bar-label"><b>{{common_words_in_msg[7][0]}}</b></div>
+            </div>
+            <div class="fourth-bar9" id="fourth-bar9">
+                <div class="column-label">{{common_words_in_msg[8][1]}}</div>
+                <div class="fourth-bar-label"><b>{{common_words_in_msg[8][0]}}</b></div>
+            </div>
+            <div class="fourth-bar10" id="fourth-bar10">
+                <div class="column-label">{{common_words_in_msg[9][1]}}</div>
+                <div class="fourth-bar-label"><b>{{common_words_in_msg[9][0]}}</b></div>
+            </div>
+            <div class="title">common_words_in_msg</div>
+        </div>
+        
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const x = {{important_frequency[0]}};
+            const y = {{important_frequency[1]}};
+            
+            const column1 = document.getElementById('column1');
+            const column2 = document.getElementById('column2');
+            
+            const maxDataValue = Math.max(x, y);
+            const chartHeight = 300;
+            const scale = chartHeight / maxDataValue;
+            
+            column1.style.height = (x * scale) + 'px';
+            column2.style.height = (y * scale) + 'px';
+
+            
+            const bar1 = document.getElementById('bar1');
+            const bar2 = document.getElementById('bar2');
+            
+            
+            
+            const value1 = {{status_frequency[0]}};
+            const value2 = {{status_frequency[1]}};
+            const maxDataValuee = Math.max(value1, value2);
+            const chartHeightt = 300;
+            const scalee = chartHeightt / maxDataValuee;
+            
+            bar1.style.height = (value1 * scalee) + 'px';
+            bar2.style.height = (value2 * scalee) + 'px';
+
+            
+            const fourthBar1 = document.getElementById('fourth-bar1');
+            const fourthBar2 = document.getElementById('fourth-bar2');
+            const fourthBar3 = document.getElementById('fourth-bar3');
+            const fourthBar4 = document.getElementById('fourth-bar4');
+            const fourthBar5 = document.getElementById('fourth-bar5');
+            const fourthBar6 = document.getElementById('fourth-bar6');
+            const fourthBar7 = document.getElementById('fourth-bar7');
+            const fourthBar8 = document.getElementById('fourth-bar8');
+            const fourthBar9 = document.getElementById('fourth-bar9');
+            const fourthBar10 = document.getElementById('fourth-bar10');
+            
+            
+            const value3 = {{common_words_in_msg[0][1]}};
+            const value4 = {{common_words_in_msg[1][1]}};
+            const value5 = {{common_words_in_msg[2][1]}};
+            const value6 = {{common_words_in_msg[3][1]}};
+            const value7 = {{common_words_in_msg[4][1]}};
+            const value8 = {{common_words_in_msg[5][1]}};
+            const value9 = {{common_words_in_msg[6][1]}};
+            const value10 = {{common_words_in_msg[7][1]}};
+            const value11 = {{common_words_in_msg[8][1]}};
+            const value12 = {{common_words_in_msg[9][1]}};
+            const maxDataValueee = value3;
+            const chartHeighttt = 300;
+            const scaleee = chartHeighttt / maxDataValueee;
+            
+            fourthBar1.style.height = (value3 * scaleee) + 'px';
+            fourthBar2.style.height = (value4 * scaleee) + 'px';
+            fourthBar3.style.height = (value5 * scaleee) + 'px';
+            fourthBar4.style.height = (value6 * scaleee) + 'px';
+            fourthBar5.style.height = (value7 * scaleee) + 'px';
+            fourthBar6.style.height = (value8 * scaleee) + 'px';
+            fourthBar7.style.height = (value9 * scaleee) + 'px';
+            fourthBar8.style.height = (value10 * scaleee) + 'px';
+            fourthBar9.style.height = (value11 * scaleee) + 'px';
+            fourthBar10.style.height = (value12 * scaleee) + 'px';
+        });
+    </script>
+    <form action="stats" class="form">
+        <button type="submit" style="width: 100px;height: 40px;">referesh</button>
+    </form>
+</body>
+</html>

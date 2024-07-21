@@ -1,6 +1,6 @@
 
 from app import app,db
-from flask import jsonify, request
+from flask import jsonify, request , render_template
 from serializers import serialize_data
 from models import Data  
 
@@ -46,12 +46,79 @@ def get_all():
     try:
 
         if request.method == 'GET':
+
          condition = {"status": {"$ne": "close"}}
          exceptThis={"createDate": 0, "closeDate": 0}
 
          data = db.data.find(condition,exceptThis)
          data_list = list(data)
          return jsonify(data_list)
+        
     except Exception as e:
         return str(e)
+    
+
+@app.route('/stats', methods = ['GET'])
+def data_visualization():
+    try:
+        stats = Data.get_statistics()
+        # print(stats)
+        avg_age = stats.get("avg_age")
+        if avg_age is None:
+            avg_age = 0
+
+        level_distribution = stats.get("level_distribution")
+        easy = level_distribution["easy"]
+        normal = level_distribution["normal"]
+        hard = level_distribution["hard"]
+        if easy[0] is None:
+                easy[0] = 0
+        if easy[1] is None:
+                easy[1] = 0
+
+        if normal[0] is None:
+                normal[0] = 0
+        if normal[1] is None:
+                normal[1] = 0
+
+        if hard[0] is None:
+                hard[0] = 0
+        if hard[1] is None:
+                hard[1] = 0
+        level_distribution = [[easy[0],easy[1]],[normal[0],normal[1]],[hard[0],hard[1]]]
+        important_frequency = stats.get("important_frequency")
+        true = important_frequency[True]
+        false = important_frequency[False]
+        no_complaint = true+false
+        
+        if true is None:
+                true = 0
+        if false is None:
+                false = 0
+        important_frequency = [true,false]
+
+        status_frequency = stats.get("status_frequency")
+        open = status_frequency["open"]
+        close = status_frequency["close"]
+        if open is None:
+                open = 0
+        if close is None:
+                close = 0
+        status_frequency = [open,close]
+        
+        common_words_in_msg = stats.get("common_words")
+        if len(common_words_in_msg) >= 10:
+                common_words_in_msg = sorted(common_words_in_msg, key=lambda x: x[1], reverse=True)[:10]
+        else:
+                common_words_in_msg = sorted(common_words_in_msg, key=lambda x: x[1], reverse=True)[:10]
+                while (len(common_words_in_msg)<10):
+                        common_words_in_msg.append(("",0))
+        
+
+        return render_template('index.html',avg_age = avg_age , level_distribution = level_distribution , important_frequency = important_frequency,
+        status_frequency= status_frequency,common_words_in_msg= common_words_in_msg,no_complaint=no_complaint)
+
+    except Exception as e:
+        return render_template("data_visualization.html",ms = str(e)+"500")
+        
 
