@@ -3,11 +3,14 @@ from app import app,db
 from flask import jsonify, request , render_template
 from serializers import serialize_data
 from models import Data  
+import base64
+import json
+import os
+
 
 @app.route('/')
 def home():
-    return "Hello, Flask!"
-
+    return "hello world from flask :)"
 
 @app.route('/create', methods=['POST'])
 def create():
@@ -110,6 +113,59 @@ def get_important():
         except Exception as e:
                 return str(e)
 
+@app.route('/delete/<id>', methods=['DELETE'])
+def delete(id):
+        try:
+                if request.method == 'DELETE':
+                        if not db.data.find_one({"_id": id}):
+                                return jsonify({'error': 'Invalid id'}), 400
+                        condition = {"_id": id}
+                        db.data.delete_one(condition)
+                        return jsonify({'message': 'The complaint deleted successfully'})
+        except Exception as e:
+                return str(e)
+
+# minioooooo on fire 
+@app.route('/delete_all', methods=['DELETE'])
+def delete_all():
+        try:
+                if request.method == 'DELETE':
+                        JSON_GET_P = request.json.get("password")
+                        # seawaysqenaaast22100#.    human encoded
+                        # c2Vhd2F5c3FlbmFhYXN0MjIxMDAjLg==   machine 
+                      
+                        if JSON_GET_P is None:
+                                return jsonify({'error': 'try again after 24 days'}), 400
+                        
+
+                        encodepass = JSON_GET_P.encode() 
+
+                        decoded_pass = base64.b64decode(encodepass)
+                        
+                        password = decoded_pass.decode("utf-8")
+
+                        if password != db.secret.find()[0].get("password"):
+                                return jsonify({'error': 'Invalid password' , 'encodepass' : encodepass ,  'decodedpass' : decoded_pass , 'password'  : password , "db" : db.secret.find()[0].get("password")  }), 400
+                        data = db.data.find({})
+                        data_list = list(data)
+                        backup_dir = ".backup"
+                        if not os.path.exists(backup_dir):
+                                os.makedirs(backup_dir)
+
+       
+                        i = 1
+                        while os.path.exists(os.path.join(backup_dir, f"bk{i}.json")):
+                          i += 1
+
+                        file_path = os.path.join(backup_dir, f"bk{i}.json")
+
+                        with open(file_path, "w") as f:
+                                json.dump(data_list, f)
+                        db.data.drop()
+                        return jsonify({'message': 'All complaints deleted successfully'})
+        except Exception as e:
+                return str(e)
+        
 @app.route('/stats', methods = ['GET'])
 def data_visualization():
     try:
