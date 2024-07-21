@@ -1,29 +1,40 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
+import React from 'react';
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { Typography } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import {
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
+  Box,
+  Typography,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from '@mui/material';
+import { tableCellClasses } from '@mui/material/TableCell';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+import { text } from 'stream/consumers';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    
     color: theme.palette.common.white,
+    fontFamily: "f",
+   
+    background: "linear-gradient(-133deg, #009788 5%, rgba(0,0,0,0.8940388655462185)70%);",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -33,6 +44,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
+  },
+  '&:hover': {
+    backgroundColor: theme.palette.action.hover,
+    transition: 'background-color 0.3s ease',
   },
   // hide last border
   '&:last-child td, &:last-child th': {
@@ -68,12 +83,51 @@ function BasicSelect({ onChange, sx }: BasicSelectProps) {
     const value = event.target.value;
     setImportant(value);
     onChange(value);
-
   };
 
   return (
-    <Box sx={sx}>
-      <FormControl fullWidth>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '5vh',
+        minWidth: '30vh',
+        bgcolor: '',
+        color: 'common.white',
+        margin:'20px',
+        marginLeft:100,
+      marginBottom:10,
+      "&:hover ": {
+             backgroundColor:"#009788",
+              color: "black"}, 
+      }}
+    >
+      <FormControl
+        fullWidth
+        sx={{
+          maxWidth: 400,
+         
+          '& .MuiInputLabel-root': {
+            color: '#000000',
+            
+            
+          },
+          '& .MuiSelect-root': {
+            color: '#000000',
+            borderRadius: 9,
+            '&:focus': {
+              borderColor: '#000000',
+              
+            },
+          },
+          '& .MuiMenuItem-root': {
+            color: '#000000',
+          },
+        }}
+      >
+        
         <InputLabel id="demo-simple-select-label">Important</InputLabel>
         <Select
           labelId="demo-simple-select-label"
@@ -81,6 +135,7 @@ function BasicSelect({ onChange, sx }: BasicSelectProps) {
           value={important}
           label="Important"
           onChange={handleChange}
+          variant="outlined"
         >
           <MenuItem value={'true'}>True</MenuItem>
           <MenuItem value={'false'}>False</MenuItem>
@@ -144,8 +199,8 @@ export default function ItemView() {
   };
 
   return (
-    <Box sx={
-      {
+    <Box
+      sx={{
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -153,32 +208,41 @@ export default function ItemView() {
         width: '80%',
         margin: 'auto',
         padding: '20px',
-      }
-
-    }>
-      <Typography variant='h1' sx={
-        {
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'black',
-          fontSize: '4rem',
-          fontWeight: 'bold',
-          textAlign: 'center',
-          marginBottom: '2rem',
-        }
-      }>Item Details</Typography>
-      <BasicSelect onChange={handleImportantChange}
+       
+      }}
+    >
+      
+    
+       <Box  justifyContent="center" alignItems="center" mt={5}>
+      <Box flex={0} textAlign="left" mr={100}>
+        
+        <Typography variant="h1" sx={{ alignItems: 'center', justifyContent: 'center', fontSize: '3rem' , textAlign: 'center',  
+        color: "#009788" ,fontFamily: "fantasy",letterSpacing: "3px",borderRadius: "2rem",
+      }}>
+                     Item Details
+      </Typography>
+      
+      </Box>
+      <Box flex={1}>
+      
+      </Box>
+    </Box>
+      <BasicSelect
+        onChange={handleImportantChange}
         sx={{
           display: 'flex',
           marginBottom: '1rem',
           width: '15%',
-
+          '& .MuiInputLabel-root': {
+            color: 'primary.main',
+          },
+          '& .MuiSelect-select': {
+            color: 'primary.main',
+          },
         }}
       />
-      <TableContainer component={Paper} sx={{
-        borderRadius: '10px',
-      }}>
-        <Table sx={{ minWidth: 700, }} aria-label="customized table">
+      <TableContainer component={Paper} sx={{ borderRadius: '6px' }}>
+        <Table sx={{ minWidth: 900 }} aria-label="customized table">
           <TableHead>
             <TableRow>
               <StyledTableCell>ID</StyledTableCell>
@@ -188,6 +252,7 @@ export default function ItemView() {
               <StyledTableCell align="center">Message</StyledTableCell>
               <StyledTableCell align="center">Important</StyledTableCell>
               <StyledTableCell align="center">Status</StyledTableCell>
+              <StyledTableCell align="center">Actions</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -200,11 +265,32 @@ export default function ItemView() {
                 <StyledTableCell align="center">{row.age}</StyledTableCell>
                 <StyledTableCell align="center">{row.level}</StyledTableCell>
                 <StyledTableCell align="center">{row.message}</StyledTableCell>
+                <StyledTableCell align="center">{row.important ? 'True' : 'False'}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {row.important ? 'True' : 'False'}
+                  {row.status === 'open' ? <CheckCircleIcon sx={{ color: 'success.main' }} /> : <CancelIcon sx={{ color: 'error.main' }} />}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {row.status === 'open' ?  <>open</> :  <>close</>}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => changeStatus('DEV')}
+                    sx={{ marginRight: '0.5rem', transition: 'transform 0.3s ease', background: "black", }}
+                    disableElevation
+                    size="small"
+                  >
+                    {row.status === 'open' ? 'Close' : 'Open'}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={handleClickOpen}
+                    sx={{ transition: 'transform 0.3s ease' , background: " #009788",}}
+                    disableElevation
+                    size="small"
+                    startIcon={<DeleteIcon />}
+                  >
+                    Delete
+                  </Button>
                 </StyledTableCell>
               </StyledTableRow>
             ))}
@@ -217,13 +303,20 @@ export default function ItemView() {
           variant="contained"
           color="primary"
           onClick={() => changeStatus('DEV')}
-          sx={{ marginRight: '1rem' }}
+          sx={{ marginRight: '1rem', transition: 'transform 0.3s ease' , background: " #009788"}}
+          disableElevation
         >
           Change Status
         </Button>
         <React.Fragment>
-          <Button variant="contained"
-            color="error" onClick={handleClickOpen}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleClickOpen}
+            sx={{ transition: 'transform 0.3s ease', background: " black",  }}
+            disableElevation
+            startIcon={<DeleteIcon />}
+          >
             Delete Item
           </Button>
           <Dialog
@@ -232,26 +325,21 @@ export default function ItemView() {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">
-              {"Confirm Deletion"}
-            </DialogTitle>
+            <DialogTitle id="alert-dialog-title">{"Confirm Deletion"}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-              Are you sure you want to delete this item? This action is irreversible.
-                
+                Are you sure you want to delete this item? This action is irreversible.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
-              <Button onClick={handleAgree}>
-              Confirm
+              <Button onClick={handleAgree} color="error">
+                Confirm
               </Button>
             </DialogActions>
           </Dialog>
         </React.Fragment>
       </Box>
-
     </Box>
-
   );
 }
