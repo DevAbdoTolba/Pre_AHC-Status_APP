@@ -114,7 +114,7 @@ export default function DataGridDemo() {
   return (
     <Box
       sx={{
-        height: "88vh",
+        height: "70vh",
         width: "100%",
       }}
     >
