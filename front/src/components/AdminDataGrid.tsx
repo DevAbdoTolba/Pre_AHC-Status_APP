@@ -81,9 +81,6 @@ export default function DataGridDemo() {
   const fetchData = async () =>{
     try{
     const response = await axios.get('/api/get/all');
-    response.data.forEach((row: any) => {
-      row.age = new Date(row.age);
-    });
     setRows(response.data);
     setSnackbar({open:true , message:'Data fetched successfully!' , severity:'success'});
     }catch(error){
