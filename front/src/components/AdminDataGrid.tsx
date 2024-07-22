@@ -10,7 +10,7 @@ import axios from 'axios';
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 150 },
-    { field: "firstName",headerName: "First name",width: 150,editable: true},
+    { field: "name",headerName: "First name",width: 150,editable: true},
     { field: "status", headerName: "Status", width: 150 },
     {
       field: "level",
@@ -52,12 +52,15 @@ import axios from 'axios';
       width: 150,
       renderCell: (params) =>
         params.value === "true" ? (
+          <>
           <PriorityHighRoundedIcon sx={{ color: "yellow" }} />
+          true
+          </>
         ) : (
-          <></>
+          <>false</>
         ),
     },
-    { field: "message", headerName: "Message", width: 150 },
+    { field: "msg", headerName: "Message", width: 150 },
     {
       field: "view",
       headerName: "View",
