@@ -100,11 +100,8 @@ export default function DataGridDemo() {
   };
 
   return (
-    <Box sx={{ height: 400, width: "100%"}}>
-      <Box sx={{display:'flex', justifyContent:'center' , justifyItems:'center'}}>
-      <Button variant="contained" color='inherit' onClick={handleRefresh} sx={{width:"12vw",height:"7vh" ,mt:2,mb:2,fontFamily: "fantasy",
-            color: "#009889", backgroundColor:"#1b1b1b" , borderRadius:'12px',fontSize:'1.5rem'}}>Refresh</Button>
-      </Box>
+    <Box sx={{ height: 400, width: "100%" }}>
+      <Button variant="contained" color='primary' onClick={handleRefresh} sx={{mb:2}}>Refresh</Button>
       <DataGrid
         rows={rows}
         columns={columns}
