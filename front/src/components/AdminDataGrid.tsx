@@ -77,9 +77,192 @@ import axios from 'axios';
       ),
     },
   ];
+  // Default rows data
+const defaultRows = [
+  {
+    id: 1,
+    name: "John",
+    status: "open",
+    level: "easy",
+    age: new Date("1990-01-01"),
+    important: "true",
+    msg: "Hello",
+  },
+  {
+    id: 2,
+    name: "Jane",
+    status: "close",
+    level: "normal",
+    age: new Date("1985-05-15"),
+    important: "false",
+    msg: "Hi",
+  },
+  {
+    id: 3,
+    name: "Alice",
+    status: "open",
+    level: "hard",
+    age: new Date("1992-07-20"),
+    important: "true",
+    msg: "Welcome",
+  },
+  {
+    id: 4,
+    name: "Bob",
+    status: "close",
+    level: "easy",
+    age: new Date("1988-11-10"),
+    important: "false",
+    msg: "Good day",
+  },
+  {
+    id: 5,
+    name: "Charlie",
+    status: "open",
+    level: "normal",
+    age: new Date("1995-04-30"),
+    important: "true",
+    msg: "Good luck",
+  },
+  {
+    id: 6,
+    name: "David",
+    status: "close",
+    level: "hard",
+    age: new Date("1991-09-15"),
+    important: "false",
+    msg: "See you",
+  },
+  {
+    id: 7,
+    name: "Eve",
+    status: "open",
+    level: "easy",
+    age: new Date("1986-12-01"),
+    important: "true",
+    msg: "Goodbye",
+  },
+  {
+    id: 8,
+    name: "Frank",
+    status: "close",
+    level: "normal",
+    age: new Date("1989-03-21"),
+    important: "false",
+    msg: "Hello again",
+  },
+  {
+    id: 9,
+    name: "Grace",
+    status: "open",
+    level: "hard",
+    age: new Date("1993-08-25"),
+    important: "true",
+    msg: "Nice to meet you",
+  },
+  {
+    id: 10,
+    name: "Hank",
+    status: "close",
+    level: "easy",
+    age: new Date("1987-05-05"),
+    important: "false",
+    msg: "Take care",
+  },
+  {
+    id: 1,
+    name: "John",
+    status: "open",
+    level: "easy",
+    age: new Date("1990-01-01"),
+    important: "true",
+    msg: "Hello",
+  },
+  {
+    id: 2,
+    name: "Jane",
+    status: "close",
+    level: "normal",
+    age: new Date("1985-05-15"),
+    important: "false",
+    msg: "Hi",
+  },
+  {
+    id: 3,
+    name: "Alice",
+    status: "open",
+    level: "hard",
+    age: new Date("1992-07-20"),
+    important: "true",
+    msg: "Welcome",
+  },
+  {
+    id: 4,
+    name: "Bob",
+    status: "close",
+    level: "easy",
+    age: new Date("1988-11-10"),
+    important: "false",
+    msg: "Good day",
+  },
+  {
+    id: 5,
+    name: "Charlie",
+    status: "open",
+    level: "normal",
+    age: new Date("1995-04-30"),
+    important: "true",
+    msg: "Good luck",
+  },
+  {
+    id: 6,
+    name: "David",
+    status: "close",
+    level: "hard",
+    age: new Date("1991-09-15"),
+    important: "false",
+    msg: "See you",
+  },
+  {
+    id: 7,
+    name: "Eve",
+    status: "open",
+    level: "easy",
+    age: new Date("1986-12-01"),
+    important: "true",
+    msg: "Goodbye",
+  },
+  {
+    id: 8,
+    name: "Frank",
+    status: "close",
+    level: "normal",
+    age: new Date("1989-03-21"),
+    important: "false",
+    msg: "Hello again",
+  },
+  {
+    id: 9,
+    name: "Grace",
+    status: "open",
+    level: "hard",
+    age: new Date("1993-08-25"),
+    important: "true",
+    msg: "Nice to meet you",
+  },
+  {
+    id: 10,
+    name: "Hank",
+    status: "close",
+    level: "easy",
+    age: new Date("1987-05-05"),
+    important: "false",
+    msg: "Take care",
+  },
+];
 
 export default function DataGridDemo() {
-  const [rows , setRows] = React.useState([]);
+  const [rows, setRows] = React.useState(defaultRows);
   const [snackbar , setSnackbar] = React.useState({open: false, message:'' , severity:'success'});
   const fetchData = async (endpoint: string, params = {}) => {
     try {
@@ -113,7 +296,7 @@ export default function DataGridDemo() {
   return (
     <Box
       sx={{
-        height: 400,
+        height: "88vh",
         width: "100%",
         backgroundColor: "#1b1b1b",
         color: "#fff",
@@ -261,11 +444,24 @@ export default function DataGridDemo() {
         }}
         pageSizeOptions={[5]}
         disableRowSelectionOnClick
+        sx={{
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: "#1b1b1b",
+          },
+          "& .MuiDataGrid-cell": {
+            color: "#fff",
+          },
+          "& .MuiDataGrid-footerContainer": {
+            backgroundColor: "#333",
+            color: "#fff",
+          }
+        }}
       />
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={handleCloseSnackBar}
+      
       >
         <Alert
           onClose={handleCloseSnackBar}
