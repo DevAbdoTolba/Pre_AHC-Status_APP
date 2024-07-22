@@ -116,8 +116,6 @@ export default function DataGridDemo() {
       sx={{
         height: "88vh",
         width: "100%",
-        backgroundColor: "#1b1b1b",
-        color: "#fff",
       }}
     >
       <Box
@@ -263,16 +261,9 @@ export default function DataGridDemo() {
         pageSizeOptions={[5]}
         disableRowSelectionOnClick
         sx={{
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: "#1b1b1b",
+          "& .MuiDataGrid-columnHeader, & .MuiDataGrid-cell, & .MuiDataGrid-footerCell": {
+            fontSize: "1rem",
           },
-          "& .MuiDataGrid-cell": {
-            color: "#fff",
-          },
-          "& .MuiDataGrid-footerContainer": {
-            backgroundColor: "#333",
-            color: "#fff",
-          }
         }}
       />
       <Snackbar
