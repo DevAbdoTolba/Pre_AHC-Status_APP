@@ -55,7 +55,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(
+interface RowData{
   id: string,
   name: string,
   age: string,
@@ -63,13 +63,8 @@ function createData(
   message: string,
   important: boolean,
   status: string
-) {
-  return { id: id, name: name, age: age, level: level, message: message, important: important, status: status };
 }
-
-const initialRows = [
-  createData('DEV', 'Amr', ((new Date(2023, 7, 20)).toISOString().split('T')[0]), 'Easy', 'Good Luck', true, 'open'),
-];
+ 
 
 interface BasicSelectProps {
   onChange: (value: string) => void;
@@ -145,8 +140,12 @@ function BasicSelect({ onChange, sx }: BasicSelectProps) {
   );
 }
 
-export default function ItemView() {
-  const [rows, setRows] = React.useState(initialRows);
+interface ItemViewProps {
+  data: RowData[];
+}
+
+const ItemView: React.FC<ItemViewProps> = ({ data }) => {
+  const [rows, setRows] = React.useState(data);
 
   const handleImportantChange = (value: string) => {
     setRows((prevRows) =>
@@ -342,4 +341,6 @@ export default function ItemView() {
       </Box>
     </Box>
   );
-}
+};
+
+export default ItemView;

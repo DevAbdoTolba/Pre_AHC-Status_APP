@@ -33,5 +33,5 @@ const ItemPage: React.FC = () => {
     }
   }, [id]);
 
-  return <ItemView/>;
+  return <ItemView data={data}/>;
 };
