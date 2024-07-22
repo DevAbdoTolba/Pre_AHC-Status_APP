@@ -26,15 +26,12 @@ import { tableCellClasses } from '@mui/material/TableCell';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { text } from 'stream/consumers';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    
     color: theme.palette.common.white,
-    fontFamily: "f",
-   
-    background: "linear-gradient(-133deg, #009788 5%, rgba(0,0,0,0.8940388655462185)70%);",
+    fontFamily: 'f',
+    background: 'linear-gradient(-133deg, #009788 5%, rgba(0,0,0,0.8940388655462185)70%);',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -49,139 +46,42 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
     transition: 'background-color 0.3s ease',
   },
-  // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
   },
 }));
 
-interface RowData{
-  id: string,
-  name: string,
-  age: string,
-  level: string,
-  message: string,
-  important: boolean,
-  status: string
-}
- 
-
-interface BasicSelectProps {
-  onChange: (value: string) => void;
-  sx?: any;
-}
-
-function BasicSelect({ onChange, sx }: BasicSelectProps) {
-  const [important, setImportant] = React.useState('');
-
-  const handleChange = (event: SelectChangeEvent) => {
-    const value = event.target.value;
-    setImportant(value);
-    onChange(value);
-  };
-
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '5vh',
-        minWidth: '30vh',
-        bgcolor: '',
-        color: 'common.white',
-        margin:'20px',
-        marginLeft:100,
-      marginBottom:10,
-      "&:hover ": {
-             backgroundColor:"#009788",
-              color: "black"}, 
-      }}
-    >
-      <FormControl
-        fullWidth
-        sx={{
-          maxWidth: 400,
-         
-          '& .MuiInputLabel-root': {
-            color: '#000000',
-            
-            
-          },
-          '& .MuiSelect-root': {
-            color: '#000000',
-            borderRadius: 9,
-            '&:focus': {
-              borderColor: '#000000',
-              
-            },
-          },
-          '& .MuiMenuItem-root': {
-            color: '#000000',
-          },
-        }}
-      >
-        
-        <InputLabel id="demo-simple-select-label">Important</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={important}
-          label="Important"
-          onChange={handleChange}
-          variant="outlined"
-        >
-          <MenuItem value={'true'}>True</MenuItem>
-          <MenuItem value={'false'}>False</MenuItem>
-        </Select>
-      </FormControl>
-    </Box>
-  );
+interface RowData {
+  id: string;
+  name: string;
+  age: string;
+  level: string;
+  message: string;
+  important: boolean;
+  status: string;
 }
 
 interface ItemViewProps {
-  data: RowData[];
+  data: RowData;
 }
 
 const ItemView: React.FC<ItemViewProps> = ({ data }) => {
-  const [rows, setRows] = React.useState(data);
+  const [row, setRow] = React.useState(data);
 
   const handleImportantChange = (value: string) => {
-    setRows((prevRows) =>
-      prevRows.map((row) => ({
-        ...row,
-        important: value === 'true',
-      }))
-    );
-  };
-
-  const setStatus = (status: string) => {
-    setRows((prevRows) =>
-      prevRows.map((row) => ({
-        ...row,
-        status: status,
-      }))
-    );
-  };
-
-  const deleteItem = (id: string) => {
-    setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+    setRow((prevRow) => ({
+      ...prevRow,
+      important: value === 'true',
+    }));
   };
 
   const changeStatus = (id: string) => {
-    setRows((prevRows) =>
-      prevRows.map((row) => {
-        if (row.id === id) {
-          return {
-            ...row,
-            status: row.status === 'open' ? 'close' : 'open',
-          };
-        }
-        return row;
-      })
-    );
+    setRow((prevRow) => ({
+      ...prevRow,
+      status: prevRow.status === 'open' ? 'close' : 'open',
+    }));
   };
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -193,7 +93,7 @@ const ItemView: React.FC<ItemViewProps> = ({ data }) => {
   };
 
   const handleAgree = () => {
-    deleteItem('DEV');
+    // Delete item logic here
     handleClose();
   };
 
@@ -207,39 +107,28 @@ const ItemView: React.FC<ItemViewProps> = ({ data }) => {
         width: '80%',
         margin: 'auto',
         padding: '20px',
-       
       }}
     >
-      
-    
-       <Box  justifyContent="center" alignItems="center" mt={5}>
-      <Box flex={0} textAlign="left" mr={100}>
-        
-        <Typography variant="h1" sx={{ alignItems: 'center', justifyContent: 'center', fontSize: '3rem' , textAlign: 'center',  
-        color: "#009788" ,fontFamily: "fantasy",letterSpacing: "3px",borderRadius: "2rem",
-      }}>
-                     Item Details
-      </Typography>
-      
+      <Box justifyContent="center" alignItems="center" mt={5}>
+        <Box flex={0} textAlign="left" mr={100}>
+          <Typography
+            variant="h1"
+            sx={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '3rem',
+              textAlign: 'center',
+              color: '#009788',
+              fontFamily: 'fantasy',
+              letterSpacing: '3px',
+              borderRadius: '2rem',
+            }}
+          >
+            Item Details
+          </Typography>
+        </Box>
+        <Box flex={1}></Box>
       </Box>
-      <Box flex={1}>
-      
-      </Box>
-    </Box>
-      <BasicSelect
-        onChange={handleImportantChange}
-        sx={{
-          display: 'flex',
-          marginBottom: '1rem',
-          width: '15%',
-          '& .MuiInputLabel-root': {
-            color: 'primary.main',
-          },
-          '& .MuiSelect-select': {
-            color: 'primary.main',
-          },
-        }}
-      />
       <TableContainer component={Paper} sx={{ borderRadius: '6px' }}>
         <Table sx={{ minWidth: 900 }} aria-label="customized table">
           <TableHead>
@@ -255,44 +144,42 @@ const ItemView: React.FC<ItemViewProps> = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <StyledTableRow key={row.id}>
-                <StyledTableCell component="th" scope="row">
-                  {row.id}
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.name}</StyledTableCell>
-                <StyledTableCell align="center">{row.age}</StyledTableCell>
-                <StyledTableCell align="center">{row.level}</StyledTableCell>
-                <StyledTableCell align="center">{row.message}</StyledTableCell>
-                <StyledTableCell align="center">{row.important ? 'True' : 'False'}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.status === 'open' ? <CheckCircleIcon sx={{ color: 'success.main' }} /> : <CancelIcon sx={{ color: 'error.main' }} />}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => changeStatus('DEV')}
-                    sx={{ marginRight: '0.5rem', transition: 'transform 0.3s ease', background: "black", }}
-                    disableElevation
-                    size="small"
-                  >
-                    {row.status === 'open' ? 'Close' : 'Open'}
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={handleClickOpen}
-                    sx={{ transition: 'transform 0.3s ease' , background: " #009788",}}
-                    disableElevation
-                    size="small"
-                    startIcon={<DeleteIcon />}
-                  >
-                    Delete
-                  </Button>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
+            <StyledTableRow key={row.id}>
+              <StyledTableCell component="th" scope="row">
+                {row.id}
+              </StyledTableCell>
+              <StyledTableCell align="center">{row.name}</StyledTableCell>
+              <StyledTableCell align="center">{row.age}</StyledTableCell>
+              <StyledTableCell align="center">{row.level}</StyledTableCell>
+              <StyledTableCell align="center">{row.message}</StyledTableCell>
+              <StyledTableCell align="center">{row.important ? 'True' : 'False'}</StyledTableCell>
+              <StyledTableCell align="center">
+                {row.status === 'open' ? <CheckCircleIcon sx={{ color: 'success.main' }} /> : <CancelIcon sx={{ color: 'error.main' }} />}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => changeStatus(row.id)}
+                  sx={{ marginRight: '0.5rem', transition: 'transform 0.3s ease', background: 'black' }}
+                  disableElevation
+                  size="small"
+                >
+                  {row.status === 'open' ? 'Close' : 'Open'}
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleClickOpen}
+                  sx={{ transition: 'transform 0.3s ease', background: ' #009788' }}
+                  disableElevation
+                  size="small"
+                  startIcon={<DeleteIcon />}
+                >
+                  Delete
+                </Button>
+              </StyledTableCell>
+            </StyledTableRow>
           </TableBody>
         </Table>
       </TableContainer>
@@ -301,8 +188,8 @@ const ItemView: React.FC<ItemViewProps> = ({ data }) => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => changeStatus('DEV')}
-          sx={{ marginRight: '1rem', transition: 'transform 0.3s ease' , background: " #009788"}}
+          onClick={() => changeStatus(row.id)}
+          sx={{ marginRight: '1rem', transition: 'transform 0.3s ease', background: ' #009788' }}
           disableElevation
         >
           Change Status
@@ -312,7 +199,7 @@ const ItemView: React.FC<ItemViewProps> = ({ data }) => {
             variant="contained"
             color="error"
             onClick={handleClickOpen}
-            sx={{ transition: 'transform 0.3s ease', background: " black",  }}
+            sx={{ transition: 'transform 0.3s ease', background: ' black' }}
             disableElevation
             startIcon={<DeleteIcon />}
           >
