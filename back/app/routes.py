@@ -1,4 +1,5 @@
 
+from datetime import datetime, date,timedelta
 from app import app,db
 from flask import jsonify, request , render_template
 from serializers import serialize_data
@@ -227,3 +228,59 @@ def data_visualization():
         return render_template("data_visualization.html",ms = str(e)+"500")
         
 
+@app.route('/update_status/<id>',methods=["PATCH"])
+def update_status(id):
+        try:
+            if not request.method == 'PATCH':
+                return jsonify({'error': 'This endpoint is intended only for PATCH method'}), 405
+            if not request.json or not "status" in request.json:
+                return jsonify({'error': 'No data provided'}), 400
+            if not ( data:= db.data.find_one({"_id": id})):
+                return jsonify({'error': 'Invalid id'}), 400
+            
+            if(data["status"] == "close" and request.json["status"] == "close"):
+                return jsonify({'warning': 'status is already set to "close"'}), 202
+            
+            if(data["status"] == "open" and request.json["status"] == "open"):
+                return jsonify({'warning': 'status is already set to "open"'}), 202
+                   
+            if(request.json["status"] == "close"):
+                now = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+                db.data.update_one({"_id":id},{"$set":{"status":"close","closeDate":now}})
+            elif(request.json["status"] == "open"):
+                db.data.update_one({"_id":id},{"$set":{"status":"open","closeDate":None}})
+            else:
+                return jsonify({'error': 'status can either be "close" or "open"'}), 400
+                     
+            return jsonify({'message': 'Status updated successfully'})
+        except Exception as e:
+            return str(e)
+
+
+@app.route('/update_important/<id>',methods=["PATCH"])
+def update_important(id):
+        try:
+            if not request.method == 'PATCH':
+                return jsonify({'error': 'This endpoint is intended only for PATCH method'}), 405
+            if not request.json or not "important" in request.json:
+                return jsonify({'error': 'No data provided'}), 400
+            
+            if not (data:= db.data.find_one({"_id": id})):
+                return jsonify({'error': 'Invalid id'}), 400
+            
+            if(data["important"] == True and request.json["important"] == True):
+                return jsonify({'warning': 'status is already set to True'}), 202
+            
+            if(data["important"] == False and request.json["important"] == False):
+                return jsonify({'warning': 'status is already set to False'}), 202
+
+            if(request.json["important"] == True):
+                db.data.update_one({"_id":id},{"$set":{"important":True}})
+            elif(request.json["important"] == False):
+                db.data.update_one({"_id":id},{"$set":{"important":False}})
+            else:
+                return jsonify({'error': 'important status can either be True or False'}), 400
+                   
+            return jsonify({'message': 'important status updated successfully'})
+        except Exception as e:
+            return str(e)
