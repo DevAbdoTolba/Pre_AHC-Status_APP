@@ -81,35 +81,173 @@ import axios from 'axios';
 export default function DataGridDemo() {
   const [rows , setRows] = React.useState([]);
   const [snackbar , setSnackbar] = React.useState({open: false, message:'' , severity:'success'});
-  const fetchData = async () =>{
-    try{
-    const response = await axios.get('/api/get/all');
-    response.data.forEach((row: any) => {
-      row.age = new Date(row.age);
-    });
-    setRows(response.data);
-    setSnackbar({open:true , message:'Data fetched successfully!' , severity:'success'});
-    }catch(error){
-    setSnackbar({open:true , message:'Failed to fetch data.' , severity:'error'});
-  }
+  const fetchData = async (endpoint: string, params = {}) => {
+    try {
+      const response = await axios.get(endpoint, { params });
+      response.data.forEach((row: any) => {
+        row.age = new Date(row.age);
+      });
+      setRows(response.data);
+      setSnackbar({
+        open: true,
+        message: "Data fetched successfully!",
+        severity: "success",
+      });
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "Failed to fetch data.",
+        severity: "error",
+      });
+    }
   };
   React.useEffect(() =>{
-    fetchData();
+    fetchData("/api/get/all");
   }, []);
 
-  const handleRefresh = ()=> {
-    fetchData();
-  };
-
+  
   const handleCloseSnackBar = () => {
     setSnackbar({...snackbar , open: false});
   };
 
   return (
-    <Box sx={{ height: 400, width: "100%"}}>
-      <Box sx={{display:'flex', justifyContent:'center' , justifyItems:'center'}}>
-      <Button variant="contained" color='inherit' onClick={handleRefresh} sx={{width:"12vw",height:"7vh" ,mt:2,mb:2,fontFamily: "fantasy",
-            color: "#009889", backgroundColor:"#1b1b1b" , borderRadius:'12px',fontSize:'1.5rem'}}>Refresh</Button>
+    <Box
+      sx={{
+        height: 400,
+        width: "100%",
+        backgroundColor: "#1b1b1b",
+        color: "#fff",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          justifyItems: "space-around",
+          m: 1,
+          flexWrap: "wrap",
+        }}
+      >
+        <Button
+          variant="contained"
+          color="inherit"
+          onClick={() => fetchData("/api/get/all")}
+          sx={{
+            width: "20vw",
+            height: "7vh",
+            mt: 2,
+            m: 1,
+            fontFamily: "fantasy",
+            color: "#009889",
+            backgroundColor: "#333",
+            borderRadius: "12px",
+            fontSize: "1.5rem",
+          }}
+        >
+          View All
+        </Button>
+        <Button
+          variant="contained"
+          color="inherit"
+          onClick={() => fetchData("/api/get/status", { status: "open" })}
+          sx={{
+            width: "20vw",
+            height: "7vh",
+            fontFamily: "fantasy",
+            color: "#009889",
+            backgroundColor: "#333",
+            borderRadius: "12px",
+            fontSize: "1.5rem",
+            m: 1,
+          }}
+        >
+          Open Only
+        </Button>
+        <Button
+          variant="contained"
+          color="inherit"
+          onClick={() => fetchData("/api/get/status", { status: "close" })}
+          sx={{
+            width: "20vw",
+            height: "7vh",
+            fontFamily: "fantasy",
+            color: "#009889",
+            backgroundColor: "#333",
+            borderRadius: "12px",
+            fontSize: "1.5rem",
+            m: 1,
+          }}
+        >
+          Closed Only
+        </Button>
+        <Button
+          variant="contained"
+          color="inherit"
+          onClick={() => fetchData("/api/get/important")}
+          sx={{
+            width: "20vw",
+            height: "7vh",
+            fontFamily: "fantasy",
+            color: "#009889",
+            backgroundColor: "#333",
+            borderRadius: "12px",
+            fontSize: "1.5rem",
+            m: 1,
+          }}
+        >
+          Important Only
+        </Button>
+        <Button
+          variant="contained"
+          color="inherit"
+          onClick={() => fetchData("/api/get/level", { level: "easy" })}
+          sx={{
+            width: "20vw",
+            height: "7vh",
+            fontFamily: "fantasy",
+            color: "#009889",
+            backgroundColor: "#333",
+            borderRadius: "12px",
+            fontSize: "1.5rem",
+            m: 1,
+          }}
+        >
+          Easy
+        </Button>
+        <Button
+          variant="contained"
+          color="inherit"
+          onClick={() => fetchData("/api/get/level", { level: "normal" })}
+          sx={{
+            width: "20vw",
+            height: "7vh",
+            fontFamily: "fantasy",
+            color: "#009889",
+            backgroundColor: "#333",
+            borderRadius: "12px",
+            fontSize: "1.5rem",
+            m: 1,
+          }}
+        >
+          Normal
+        </Button>
+        <Button
+          variant="contained"
+          color="inherit"
+          onClick={() => fetchData("/api/get/level", { level: "hard" })}
+          sx={{
+            width: "20vw",
+            height: "7vh",
+            fontFamily: "fantasy",
+            color: "#009889",
+            backgroundColor: "#333",
+            borderRadius: "12px",
+            fontSize: "1.5rem",
+            m: 1,
+          }}
+        >
+          Hard
+        </Button>
       </Box>
       <DataGrid
         rows={rows}
@@ -124,12 +262,17 @@ export default function DataGridDemo() {
         pageSizeOptions={[5]}
         disableRowSelectionOnClick
       />
-      <Snackbar 
-      open={snackbar.open}
-      autoHideDuration={6000}
-      onClose={handleCloseSnackBar}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackBar}
       >
-        <Alert onClose={handleCloseSnackBar} severity={snackbar.severity as AlertColor}>{snackbar.message}</Alert>
+        <Alert
+          onClose={handleCloseSnackBar}
+          severity={snackbar.severity as AlertColor}
+        >
+          {snackbar.message}
+        </Alert>
       </Snackbar>
     </Box>
   );
