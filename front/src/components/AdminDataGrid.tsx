@@ -4,9 +4,9 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import * as React from 'react';
 import PriorityHighRoundedIcon from "@mui/icons-material/PriorityHighRounded";
 import { green, yellow, red ,blue } from "@mui/material/colors";
-import { Button, Typography } from '@mui/material';
+import { Button, Typography,Snackbar,Alert } from '@mui/material';
 import Link from 'next/link';
-
+import axios from 'axios';
      
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 150 },
@@ -75,92 +75,115 @@ import Link from 'next/link';
     },
   ];
 
-const rows = [
-  {
-    id: 1,
-    level: "easy",
-    firstName: "Jon",
-    age: new Date("2000-02-05"),
-    important: "false",
-    status: "open",
-    message: "frontend",
-  },
-  {
-    id: 2,
-    level: "easy",
-    firstName: "Cersei",
-    age: new Date("2000-02-05"),
-    important: "ture",
-    status: "open",
-    message: "hello",
-  },
-  {
-    id: 3,
-    level: "normal",
-    firstName: "Jaime",
-    age: new Date("2000-02-05"),
-    important: "false",
-    status: "close",
-    message: "frontend",
-  },
-  {
-    id: 4,
-    level: "hard",
-    firstName: "Arya",
-    age: new Date("2000-02-05"),
-    important: "false",
-    status: "open",
-    message: "backend",
-  },
-  {
-    id: 5,
-    level: "hard",
-    firstName: "Daenerys",
-    age: new Date("2000-02-05"),
-    important: "true",
-    status: "close",
-    message: "backend",
-  },
-  {
-    id: 6,
-    level: "easy",
-    firstName: "Aill",
-    age: new Date("2000-02-05"),
-    important: "true",
-    status: "open",
-    message: "hello",
-  },
-  {
-    id: 7,
-    level: "hard",
-    firstName: "Ferrara",
-    age: new Date("2000-02-05"),
-    important: "ture",
-    status: "open",
-    message: "frontend",
-  },
-  {
-    id: 8,
-    level: "normal",
-    firstName: "Rossini",
-    age: new Date("2000-02-05"),
-    important: "true",
-    status: "open",
-    message: "frontend",
-  },
-  {
-    id: 9,
-    level: "hard",
-    firstName: "Harvey",
-    age: new Date("2000-02-05"),
-    important: "false",
-    status: "open",
-    message: "frontend",
-  },
-];
+
+// const rows = [
+//   {
+//     id: 1,
+//     level: "easy",
+//     firstName: "Jon",
+//     age: new Date("2000-02-05"),
+//     important: "false",
+//     status: "open",
+//     message: "frontend",
+//   },
+//   {
+//     id: 2,
+//     level: "easy",
+//     firstName: "Cersei",
+//     age: new Date("2000-02-05"),
+//     important: "ture",
+//     status: "open",
+//     message: "hello",
+//   },
+//   {
+//     id: 3,
+//     level: "normal",
+//     firstName: "Jaime",
+//     age: new Date("2000-02-05"),
+//     important: "false",
+//     status: "close",
+//     message: "frontend",
+//   },
+//   {
+//     id: 4,
+//     level: "hard",
+//     firstName: "Arya",
+//     age: new Date("2000-02-05"),
+//     important: "false",
+//     status: "open",
+//     message: "backend",
+//   },
+//   {
+//     id: 5,
+//     level: "hard",
+//     firstName: "Daenerys",
+//     age: new Date("2000-02-05"),
+//     important: "true",
+//     status: "close",
+//     message: "backend",
+//   },
+//   {
+//     id: 6,
+//     level: "easy",
+//     firstName: "Aill",
+//     age: new Date("2000-02-05"),
+//     important: "true",
+//     status: "open",
+//     message: "hello",
+//   },
+//   {
+//     id: 7,
+//     level: "hard",
+//     firstName: "Ferrara",
+//     age: new Date("2000-02-05"),
+//     important: "ture",
+//     status: "open",
+//     message: "frontend",
+//   },
+//   {
+//     id: 8,
+//     level: "normal",
+//     firstName: "Rossini",
+//     age: new Date("2000-02-05"),
+//     important: "true",
+//     status: "open",
+//     message: "frontend",
+//   },
+//   {
+//     id: 9,
+//     level: "hard",
+//     firstName: "Harvey",
+//     age: new Date("2000-02-05"),
+//     important: "false",
+//     status: "open",
+//     message: "frontend",
+//   },
+// ];
 
 
 export default function DataGridDemo() {
+  const [rows , setRows] = React.useState([]);
+  const [snackbar , setSnackbar] = React.useState({open: false, message:'' , severity:'success'});
+  const fetchData = async () =>{
+    try{
+    const response = await axios.get('/api/get/all');
+    setRows(response.data);
+    setSnackbar({open:true , message:'Data fetched successfully!' , severity:'success'});
+    }catch(error){
+    setSnackbar({open:true , message:'Failed to fetch data.' , severity:'error'});
+  }
+  };
+  React.useEffect(() =>{
+    fetchData();
+  }, []);
+
+  const handleRefresh = ()=> {
+    fetchData();
+  };
+
+  const handleCloseSnackBar = () => {
+    setSnackbar({...snackbar , open: false});
+  };
   
   return (
     <Box sx={{ height: 400, width: "100%" }}>
