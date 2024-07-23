@@ -14,7 +14,7 @@ interface RowData {
 }
 
 const ItemPage: React.FC = () => {
-  const [data, setData] = useState<RowData|null>(null); 
+  const [data, setData] = useState<RowData>({} as RowData); 
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
   const { id } = router.query;
@@ -31,7 +31,7 @@ const ItemPage: React.FC = () => {
           })
           .then((result) => {
             console.log('Result data:', result.data);
-            setData(result.data);
+            setData(result);
             setLoading(false);
           })
           .catch((error) => {
@@ -45,7 +45,7 @@ const ItemPage: React.FC = () => {
     return <p>Loading...</p>;
   }
 
-  if (!data) {
+  if (!data.id) {
     return <p>No data found.</p>;
   }
   return <ItemView data={data}/>;
