@@ -190,7 +190,7 @@ const ItemView: React.FC<ItemViewProps> = ({ data }) => {
   const deleteItem = async() => {
      if (row) {
        try {
-         await fetch(`/api/patch/delete/${row.id}`, {
+         await fetch(`/api/delete/${row.id}`, {
            method: "DELETE",
          });
          setRow(null);
