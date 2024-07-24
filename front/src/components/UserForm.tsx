@@ -18,6 +18,7 @@ import { pink, teal } from "@mui/material/colors";
 import { useForm, Controller } from "react-hook-form";
 import SuccessScreen from "./SuccessScreen";
 import { json } from "stream/consumers";
+import Snackbar from '@mui/material/Snackbar';
 
 // Custom theme
 const theme = createTheme({
@@ -49,11 +50,11 @@ const UserFormDesign: React.FC = () => {
        } = useForm<FormValues>();
        const [loading, setLoading] = useState(false);
        const [success, setSuccess] = useState(false);
-       const [error, setError] = useState<string | null>(null);
+       const [error, setError] = useState<string>("");
 
        const onSubmit = async (data: FormValues) => {
               setLoading(true);
-              setError(null);
+              setError("");
               setSuccess(false);
 
 
@@ -64,17 +65,19 @@ const UserFormDesign: React.FC = () => {
                             body: JSON.stringify(data)
                      }
               ).then((result) => {
-                     if (result?.ok) {
-                            setSuccess(true);
+                     return result.json()
+              }).then((data => {
+                     if (data?.error) {
+                            throw new Error(data?.error);
                      }
                      else {
-                            throw new Error();
+                            setSuccess(true);
                      }
 
-              }).
+              })).
                      catch((e) => {
                             setSuccess(false);
-                            setError("Submission failed");
+                            setError(e.message);
                      }).finally(() => {
                             setLoading(false);
                             reset();
@@ -93,7 +96,13 @@ const UserFormDesign: React.FC = () => {
        if (success) {
               return <SuccessScreen />;
        }
-
+       const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+              if (reason === 'clickaway') {
+                     return;
+              }
+              setSuccess(false);
+              setError("");
+       };
        return (
               <ThemeProvider theme={theme}>
                      <Container
@@ -244,6 +253,16 @@ const UserFormDesign: React.FC = () => {
                                    </form>
                             </Paper>
                      </Container>
+                     <Snackbar open={(success || error?.length > 0) as boolean} autoHideDuration={6000} onClose={handleClose}>
+                            <Alert
+                                   onClose={handleClose}
+                                   severity={success ? "success" : "error"}
+                                   variant="filled"
+                                   sx={{ width: '100%' }}
+                            >
+                                   {success ? "success" : `${error}`}
+                            </Alert>
+                     </Snackbar>
               </ThemeProvider>
        );
 };
