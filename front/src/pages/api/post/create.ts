@@ -9,7 +9,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         body: JSON.stringify(req.body),
       });
       const data = await response.json();
-      res.status(201).json(data);
+      
+      res.status(response.status).json(data);
     } catch (error) {
       res.status(500).json({ error: 'Failed to create item' });
     }
