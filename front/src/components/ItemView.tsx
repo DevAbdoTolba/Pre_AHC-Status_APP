@@ -154,7 +154,7 @@ const ItemView: React.FC<ItemViewProps> = ({ data }) => {
   
      if (row) {
        try {
-         await fetch(`/api/update_important/${row.id}`, {
+         await fetch(`/api/patch/update_important/${row.id}`, {
            method: "PATCH",
            headers: { "Content-Type": "application/json" },
            body: JSON.stringify({ important: value === "true" }),
@@ -172,7 +172,7 @@ const ItemView: React.FC<ItemViewProps> = ({ data }) => {
   const setStatus = async(status: string) => {
      if (row) {
        try {
-         await fetch(`/api/update_status/${row.id}`, {
+         await fetch(`/api/patch/update_status/${row.id}`, {
            method: "PATCH",
            headers: { "Content-Type": "application/json" },
            body: JSON.stringify({ status }),
@@ -190,11 +190,11 @@ const ItemView: React.FC<ItemViewProps> = ({ data }) => {
   const deleteItem = async() => {
      if (row) {
        try {
-         await fetch(`/api/delete/${row.id}`, {
+         await fetch(`/api/patch/delete/${row.id}`, {
            method: "DELETE",
          });
          setRow(null);
-        router.push("/"); // Navigate to home page
+        router.push("/"); 
        } catch (error) {
          console.error("Error deleting item:", error);
        }
