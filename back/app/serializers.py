@@ -40,7 +40,6 @@ def serialize_data(data_model):
         if data_dict["important"] not in (True, False):
             raise SerializationError("Invalid value for field: important.")
 
-
         if data_dict["status"] not in ("open" , "close"):
 
             raise SerializationError("Invalid value for field: status.")
@@ -54,18 +53,17 @@ def serialize_data(data_model):
         if data_dict["status"] == "close" and data_dict["closeDate"]!= None:
             if data_dict["closeDate"] < data_dict["createDate"] :
                 raise SerializationError("close date can't be before create date.")
-           
         if data_dict["status"] == 'open'and data_dict["createDate"]== None:
-         raise SerializationError(" complaints must have create date  .")
+                raise SerializationError(" complaints must have create date  .")
         
-        if create_date > datetime.now().date():
-         raise SerializationError("Create date cannot be in the future.")
+        if create_date and datetime.fromisoformat(create_date).date() > datetime.now().date():
+                raise SerializationError("Create date cannot be in the future.")
         
             
         
         return data_dict
     except Exception as e:
-        raise SerializationError(f"Error serializing data: {e}")
+        raise SerializationError(f"{e}")
 
 def deserialize_data(data):
     if not isinstance(data, dict):
@@ -105,4 +103,4 @@ def deserialize_data(data):
         data_model = Data.from_dict(data)
         return data_model
     except Exception as e:
-        raise DeserializationError(f"Error deserializing data: {e}")
+        raise DeserializationError(f"{e}")
