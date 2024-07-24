@@ -32,13 +32,13 @@ const theme = createTheme({
        },
 });
 
-const levels = ["Easy", "Normal", "Hard"];
+const levels = ["easy", "normal", "hard"];
 
 type FormValues = {
-       username: string;
-       birthDate: string;
-       level: string;
-       message: string;
+       name: string;
+       age: Date;
+       level: "easy"|"normal"|"hard";
+       msg: string;
 };
 
 const UserFormDesign: React.FC = () => {
@@ -56,8 +56,6 @@ const UserFormDesign: React.FC = () => {
               setLoading(true);
               setError("");
               setSuccess(false);
-
-
               fetch("/api/post/create",
                      {
                             method: "POST",
@@ -72,6 +70,7 @@ const UserFormDesign: React.FC = () => {
                      }
                      else {
                             setSuccess(true);
+                            reset();
                      }
 
               })).
@@ -80,9 +79,16 @@ const UserFormDesign: React.FC = () => {
                             setError(e.message);
                      }).finally(() => {
                             setLoading(false);
-                            reset();
                      })
        };
+
+
+       
+
+       
+       
+           
+    
 
        // Validation functions
        const hasSpecialCharacters = (input: string) =>
@@ -165,15 +171,15 @@ const UserFormDesign: React.FC = () => {
 
                                           <TextField
                                                  label="Name"
-                                                 {...register("username", {
-                                                        required: "UserName is Required",
+                                                 {...register("name", {
+                                                        required: "name is Required",
                                                         validate: {
                                                                NoBigMsg: isUserNameVeryBig,
                                                                NoSpecialLetters: hasSpecialCharacters,
                                                         },
                                                  })}
-                                                 error={!!errors.username}
-                                                 helperText={errors.username?.message ? errors.username?.message : " "}
+                                                 error={!!errors.name}
+                                                 helperText={errors.name?.message ? errors.name?.message : " "}
                                                  variant="outlined"
                                                  sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
                                           />
@@ -181,10 +187,10 @@ const UserFormDesign: React.FC = () => {
                                           <TextField
                                                  label="Age"
                                                  type="date"
-                                                 {...register("birthDate", { required: "Date is Required" })}
+                                                 {...register("age", { required: "Age is Required" })}
                                                  InputLabelProps={{ shrink: true }}
-                                                 error={!!errors.birthDate}
-                                                 helperText={errors.birthDate?.message ? errors.birthDate?.message : " "}
+                                                 error={!!errors.age}
+                                                 helperText={errors.age?.message ? errors.age?.message : " "}
                                                  variant="outlined"
                                                  sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
                                           />
@@ -223,7 +229,7 @@ const UserFormDesign: React.FC = () => {
 
                                           <TextField
                                                  label="Message"
-                                                 {...register("message", {
+                                                 {...register("msg", {
                                                         required: "Message field is required",
                                                         validate: {
                                                                NoBigMsg: isMessageBig,
@@ -232,8 +238,8 @@ const UserFormDesign: React.FC = () => {
                                                  })}
                                                  multiline
                                                  rows={4}
-                                                 error={!!errors.message}
-                                                 helperText={errors.message?.message ? errors.message?.message : " "}
+                                                 error={!!errors.msg}
+                                                 helperText={errors.msg?.message ? errors.msg?.message : " "}
                                                  variant="outlined"
                                                  sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
                                           />
