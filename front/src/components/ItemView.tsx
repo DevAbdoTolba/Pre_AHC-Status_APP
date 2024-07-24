@@ -26,7 +26,8 @@ import { tableCellClasses } from '@mui/material/TableCell';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { text } from 'stream/consumers';
+import { useRouter } from "next/router"; 
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -146,34 +147,67 @@ interface ItemViewProps {
 
 const ItemView: React.FC<ItemViewProps> = ({ data }) => {
   const [row, setRow] = React.useState<RowData | null>(data);
-
-  const handleImportantChange = (value: string) => {
-    setRow((prevRow) => prevRow ? {
-      ...prevRow,
-      important: value === 'true',
-    } : null);
+  const [open, setOpen] = React.useState(false);
+ 
+  const router = useRouter();
+  const handleImportantChange = async (value: string) => {
+  
+     if (row) {
+       try {
+         await fetch(`/api/patch/update_important/${row.id}`, {
+           method: "PATCH",
+           headers: { "Content-Type": "application/json" },
+           body: JSON.stringify({ important: value === "true" }),
+         });
+         setRow({
+           ...row,
+           important: value === "true",
+         });
+       } catch (error) {
+         console.error("Error updating important status:", error);
+       }
+     }
   };
 
-  const setStatus = (status: string) => {
-    setRow((prevRow) => prevRow ? {
-      ...prevRow,
-      status: status,
-    } : null);
+  const setStatus = async(status: string) => {
+     if (row) {
+       try {
+         await fetch(`/api/patch/update_status/${row.id}`, {
+           method: "PATCH",
+           headers: { "Content-Type": "application/json" },
+           body: JSON.stringify({ status }),
+         });
+         setRow({
+           ...row,
+           status: status,
+         });
+       } catch (error) {
+         console.error("Error updating status:", error);
+       }
+     }
   };
 
-  const deleteItem =() => {
-    setRow(null);
+  const deleteItem = async() => {
+     if (row) {
+       try {
+         await fetch(`/api/delete/${row.id}`, {
+           method: "DELETE",
+         });
+         setRow(null);
+        router.push("/"); 
+       } catch (error) {
+         console.error("Error deleting item:", error);
+       }
+     }
   };
 
   const changeStatus = () => {
    if (row) {  
-      setRow({
-        ...row,
-        status: row.status === 'open' ? 'close' : 'open',
-      });
+     const newStatus = row.status === "open" ? "close" : "open";
+     setStatus(newStatus);
     }
   };
-  const [open, setOpen] = React.useState(false);
+  
 
   const handleClickOpen = () => {
     setOpen(true);
