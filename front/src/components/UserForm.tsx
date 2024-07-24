@@ -31,12 +31,12 @@ const theme = createTheme({
        },
 });
 
-const levels = ["Easy", "Normal", "Hard"];
+const levels = ["easy", "normal", "hard"];
 
 type FormValues = {
        username: string;
-       birthDate: string;
-       level: string;
+       Age: Date;
+       level: "easy"|"normal"|"hard";
        message: string;
 };
 
@@ -51,36 +51,36 @@ const UserFormDesign: React.FC = () => {
        const [success, setSuccess] = useState(false);
        const [error, setError] = useState<string | null>(null);
 
-       const onSubmit = async (data: FormValues) => {
-              setLoading(true);
-              setError(null);
-              setSuccess(false);
-
-
-              fetch("/api/post/create",
-                     {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify(data)
-                     }
-              ).then((result) => {
-                     if (result?.ok) {
-                            setSuccess(true);
-                     }
-                     else {
-                            throw new Error();
-                     }
-
-              }).
-                     catch((e) => {
-                            setSuccess(false);
-                            setError("Submission failed");
-                     }).finally(() => {
-                            setLoading(false);
-                            reset();
-                     })
-       };
-
+       
+const onSubmit = async (data: FormValues) => {
+       setLoading(true);
+       setError(null);
+       setSuccess(false);
+   
+       let resetFields: Partial<FormValues> = {}; // Define which fields to reset
+   
+       try {
+           const result = await fetch("/api/post/create", {
+               method: "POST",
+               headers: { "Content-Type": "application/json" },
+               body: JSON.stringify(data),
+           });
+   
+           if (result.ok) {
+               setSuccess(true);
+               resetFields = { ...data, Age:"" ,}; // Reset all fields except 'Age'
+           } else {
+               throw new Error();
+           }
+       } catch (e) {
+           setSuccess(false);
+           setError("Submission failed");
+       } finally {
+           setLoading(false);
+           reset(resetFields); // Reset form fields conditionally
+       }
+   };
+   
        // Validation functions
        const hasSpecialCharacters = (input: string) =>
               /^[A-Za-z\u0600-\u06FF\s]+$/.test(input) ||
@@ -160,7 +160,7 @@ const UserFormDesign: React.FC = () => {
                                           <TextField
                                                  label="Name"
                                                  {...register("username", {
-                                                        required: "UserName is Required",
+                                                        required: "Name is Required",
                                                         validate: {
                                                                NoBigMsg: isUserNameVeryBig,
                                                                NoSpecialLetters: hasSpecialCharacters,
@@ -175,10 +175,10 @@ const UserFormDesign: React.FC = () => {
                                           <TextField
                                                  label="Age"
                                                  type="date"
-                                                 {...register("birthDate", { required: "Date is Required" })}
+                                                 {...register("Age", { required: "Age is Required" })}
                                                  InputLabelProps={{ shrink: true }}
-                                                 error={!!errors.birthDate}
-                                                 helperText={errors.birthDate?.message ? errors.birthDate?.message : " "}
+                                                 error={!!errors.Age}
+                                                 helperText={errors.Age?.message ? errors.Age?.message : " "}
                                                  variant="outlined"
                                                  sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
                                           />
