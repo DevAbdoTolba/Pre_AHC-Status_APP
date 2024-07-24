@@ -34,10 +34,10 @@ const theme = createTheme({
 const levels = ["easy", "normal", "hard"];
 
 type FormValues = {
-       username: string;
-       Age: Date;
+       name: string;
+       age: Date;
        level: "easy"|"normal"|"hard";
-       message: string;
+       msg: string;
 };
 
 const UserFormDesign: React.FC = () => {
@@ -68,16 +68,18 @@ const onSubmit = async (data: FormValues) => {
    
            if (result.ok) {
                setSuccess(true);
-               resetFields = { ...data, Age:"" ,}; // Reset all fields except 'Age'
+               
            } else {
                throw new Error();
            }
        } catch (e) {
+              reset();
            setSuccess(false);
-           setError("Submission failed");
+          setError("Submission failed");
        } finally {
            setLoading(false);
-           reset(resetFields); // Reset form fields conditionally
+           
+           setError("Submission failed"); 
        }
    };
    
@@ -159,15 +161,15 @@ const onSubmit = async (data: FormValues) => {
 
                                           <TextField
                                                  label="Name"
-                                                 {...register("username", {
-                                                        required: "Name is Required",
+                                                 {...register("name", {
+                                                        required: "name is Required",
                                                         validate: {
                                                                NoBigMsg: isUserNameVeryBig,
                                                                NoSpecialLetters: hasSpecialCharacters,
                                                         },
                                                  })}
-                                                 error={!!errors.username}
-                                                 helperText={errors.username?.message ? errors.username?.message : " "}
+                                                 error={!!errors.name}
+                                                 helperText={errors.name?.message ? errors.name?.message : " "}
                                                  variant="outlined"
                                                  sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
                                           />
@@ -175,10 +177,10 @@ const onSubmit = async (data: FormValues) => {
                                           <TextField
                                                  label="Age"
                                                  type="date"
-                                                 {...register("Age", { required: "Age is Required" })}
+                                                 {...register("age", { required: "Age is Required" })}
                                                  InputLabelProps={{ shrink: true }}
-                                                 error={!!errors.Age}
-                                                 helperText={errors.Age?.message ? errors.Age?.message : " "}
+                                                 error={!!errors.age}
+                                                 helperText={errors.age?.message ? errors.age?.message : " "}
                                                  variant="outlined"
                                                  sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
                                           />
@@ -217,7 +219,7 @@ const onSubmit = async (data: FormValues) => {
 
                                           <TextField
                                                  label="Message"
-                                                 {...register("message", {
+                                                 {...register("msg", {
                                                         required: "Message field is required",
                                                         validate: {
                                                                NoBigMsg: isMessageBig,
@@ -226,8 +228,8 @@ const onSubmit = async (data: FormValues) => {
                                                  })}
                                                  multiline
                                                  rows={4}
-                                                 error={!!errors.message}
-                                                 helperText={errors.message?.message ? errors.message?.message : " "}
+                                                 error={!!errors.msg}
+                                                 helperText={errors.msg?.message ? errors.msg?.message : " "}
                                                  variant="outlined"
                                                  sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
                                           />
