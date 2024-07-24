@@ -56,7 +56,7 @@ def serialize_data(data_model):
         if data_dict["status"] == 'open'and data_dict["createDate"]== None:
                 raise SerializationError(" complaints must have create date  .")
         
-        if create_date and datetime.fromisoformat(create_date).date() > datetime.now().date():
+        if create_date and datetime.fromisoformat(str(create_date)).date() > datetime.now().date():
                 raise SerializationError("Create date cannot be in the future.")
         
             
