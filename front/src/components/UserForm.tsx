@@ -161,10 +161,7 @@ const UserFormDesign: React.FC = () => {
                                                  gap: "1rem",
                                           }}
                                    >
-                                          {success && (
-                                                 <Alert severity="success">Form submitted successfully!</Alert>
-                                          )}
-                                          {error && <Alert severity="error">{error}</Alert>}
+                                          
 
                                           <TextField
                                                  label="Name"
