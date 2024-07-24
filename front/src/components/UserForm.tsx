@@ -18,6 +18,7 @@ import { pink, teal } from "@mui/material/colors";
 import { useForm, Controller } from "react-hook-form";
 import SuccessScreen from "./SuccessScreen";
 import { json } from "stream/consumers";
+import Snackbar from '@mui/material/Snackbar';
 
 // Custom theme
 const theme = createTheme({
@@ -49,40 +50,46 @@ const UserFormDesign: React.FC = () => {
        } = useForm<FormValues>();
        const [loading, setLoading] = useState(false);
        const [success, setSuccess] = useState(false);
-       const [error, setError] = useState<string | null>(null);
+       const [error, setError] = useState<string>("");
+
+       const onSubmit = async (data: FormValues) => {
+              setLoading(true);
+              setError("");
+              setSuccess(false);
+              fetch("/api/post/create",
+                     {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(data)
+                     }
+              ).then((result) => {
+                     return result.json()
+              }).then((data => {
+                     if (data?.error) {
+                            throw new Error(data?.error);
+                     }
+                     else {
+                            setSuccess(true);
+                            reset();
+                     }
+
+              })).
+                     catch((e) => {
+                            setSuccess(false);
+                            setError(e.message);
+                     }).finally(() => {
+                            setLoading(false);
+                     })
+       };
+
 
        
-const onSubmit = async (data: FormValues) => {
-       setLoading(true);
-       setError(null);
-       setSuccess(false);
-   
-       let resetFields: Partial<FormValues> = {}; // Define which fields to reset
-   
-       try {
-           const result = await fetch("/api/post/create", {
-               method: "POST",
-               headers: { "Content-Type": "application/json" },
-               body: JSON.stringify(data),
-           });
-   
-           if (result.ok) {
-               setSuccess(true);
-               
-           } else {
-               throw new Error();
-           }
-       } catch (e) {
-              reset();
-           setSuccess(false);
-          setError("Submission failed");
-       } finally {
-           setLoading(false);
+
+       
+       
            
-           setError("Submission failed"); 
-       }
-   };
-   
+    
+
        // Validation functions
        const hasSpecialCharacters = (input: string) =>
               /^[A-Za-z\u0600-\u06FF\s]+$/.test(input) ||
@@ -95,7 +102,13 @@ const onSubmit = async (data: FormValues) => {
        if (success) {
               return <SuccessScreen />;
        }
-
+       const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+              if (reason === 'clickaway') {
+                     return;
+              }
+              setSuccess(false);
+              setError("");
+       };
        return (
               <ThemeProvider theme={theme}>
                      <Container
@@ -154,10 +167,7 @@ const onSubmit = async (data: FormValues) => {
                                                  gap: "1rem",
                                           }}
                                    >
-                                          {success && (
-                                                 <Alert severity="success">Form submitted successfully!</Alert>
-                                          )}
-                                          {error && <Alert severity="error">{error}</Alert>}
+                                          
 
                                           <TextField
                                                  label="Name"
@@ -246,6 +256,16 @@ const onSubmit = async (data: FormValues) => {
                                    </form>
                             </Paper>
                      </Container>
+                     <Snackbar open={(success || error?.length > 0) as boolean} autoHideDuration={6000} onClose={handleClose}>
+                            <Alert
+                                   onClose={handleClose}
+                                   severity={success ? "success" : "error"}
+                                   variant="filled"
+                                   sx={{ width: '100%' }}
+                            >
+                                   {success ? "success" : `${error}`}
+                            </Alert>
+                     </Snackbar>
               </ThemeProvider>
        );
 };
