@@ -16,6 +16,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { pink, teal } from "@mui/material/colors";
 import { useForm, Controller } from "react-hook-form";
+import SuccessScreen from "./SuccessScreen";
 import { json } from "stream/consumers";
 
 // Custom theme
@@ -88,6 +89,10 @@ const UserFormDesign: React.FC = () => {
               input.length < 50 || "Your Name is very Big";
        const isMessageBig = (input: string) =>
               input.length < 200 || "Message is very Big";
+
+       if (success) {
+              return <SuccessScreen />;
+       }
 
        return (
               <ThemeProvider theme={theme}>
